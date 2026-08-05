@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="entry">
+      <UniqueIdentifier>{a77a5ac1-42d5-4579-9d05-557431057234}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="entry\Application">
+      <UniqueIdentifier>{5db7d8fd-b19f-47d4-bfc6-7246197cf195}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="window">
+      <UniqueIdentifier>{a7410a6d-e9b0-4966-9caa-956c3b0717cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MoveProhibited">
+      <UniqueIdentifier>{7a083e08-0ebc-4a94-a7bd-828f51587bf3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="directx">
+      <UniqueIdentifier>{b550dbbf-95bc-42fa-ae65-4678bbb33ee7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="entry\entry.cpp">
+      <Filter>entry</Filter>
+    </ClCompile>
+    <ClCompile Include="entry\Application\Application.cpp">
+      <Filter>entry\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="window\FullWindow.cpp">
+      <Filter>window</Filter>
+    </ClCompile>
+    <ClCompile Include="window\ScaleWindow.cpp">
+      <Filter>window</Filter>
+    </ClCompile>
+    <ClCompile Include="window\Window_Base.cpp">
+      <Filter>window</Filter>
+    </ClCompile>
+    <ClCompile Include="directx\Device.cpp">
+      <Filter>directx</Filter>
+    </ClCompile>
+    <ClCompile Include="directx\DXGI.cpp">
+      <Filter>directx</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="entry\Application\Application.h">
+      <Filter>entry\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="window\FullWindow.h">
+      <Filter>window</Filter>
+    </ClInclude>
+    <ClInclude Include="window\ScaleWindow.h">
+      <Filter>window</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveProhibited\Nomove.h">
+      <Filter>MoveProhibited</Filter>
+    </ClInclude>
+    <ClInclude Include="window\Window_Base.h">
+      <Filter>window</Filter>
+    </ClInclude>
+    <ClInclude Include="directx\Device.h">
+      <Filter>directx</Filter>
+    </ClInclude>
+    <ClInclude Include="directx\DXGI.h">
+      <Filter>directx</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
