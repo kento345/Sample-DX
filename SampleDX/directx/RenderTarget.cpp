@@ -65,7 +65,7 @@ RenderTarget::~RenderTarget()
 
 [[nodiscard]] ID3D12Resource* RenderTarget::get(uint32_t index) const noexcept
 {
-	if (index >= rendertargets_.size() || rendertargets_[index]) {
+	if (index >= rendertargets_.size() || !rendertargets_[index]) {
 		assert(false && "不正なレンダーターゲットです\0");
 		return nullptr;
 	}

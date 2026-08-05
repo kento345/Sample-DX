@@ -97,10 +97,66 @@ bool Application::initialize(HINSTANCE hInstance)
 	return true;
 }
 
+/// <summary>
+ /// リソースバリアを設定
+ /// </summary>
+ /// <param name="resource"></param>
+ /// <param name="from"></param>
+ /// <param name="to"></param>
+ /// <returns></returns>
+D3D12_RESOURCE_BARRIER resourceBarrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES from, D3D12_RESOURCE_STATES to) noexcept {
+	D3D12_RESOURCE_BARRIER barrier{};
+	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	barrier.Transition.pResource = resource;
+	barrier.Transition.StateBefore = from;
+	barrier.Transition.StateAfter = to;
+	barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+
+	return barrier;
+}
+
 void Application::loop() noexcept
 {
 	while (windowInstance_->messageLoop())
 	{
+		// 現在のバックバッファインデックスを取得
+		const auto backBufferIndex = swaoChainInstance_.get()->GetCurrentBackBufferIndex();
 
+		// 以前のフレームの GPU の処理が完了しているか確認して待機する
+		if (frameFenceValue_[backBufferIndex] != 0) {
+			fenceInstance_.wait(frameFenceValue_[backBufferIndex]);
+		}
+
+		// コマンドアロケータリセット
+		commandAllocatorInstance_[backBufferIndex].reset();
+		// コマンドリストリセット
+		commandListInstance_.reset(commandAllocatorInstance_[backBufferIndex]);
+		//リソースバリアでレンダーターゲットをPresentからRenderTargetへ変更
+		auto pToRT = resourceBarrier(renderTargetInstance_.get(backBufferIndex), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+		commandListInstance_.get()->ResourceBarrier(1, &pToRT);
+
+		//レンダーターゲットの設定
+		D3D12_CPU_DESCRIPTOR_HANDLE handles[] = { renderTargetInstance_.getDescriptorHandle(deviceInstance_,descriptorHeapInstance_,backBufferIndex) };
+		commandListInstance_.get()->OMSetRenderTargets(1, handles, false, nullptr);
+
+		//レンダーターゲットのクリア
+		const float	 cleaColor[] = { 1.0f, 1.0f, 0.0f, 1.0f };  // 赤色でクリア
+		commandListInstance_.get()->ClearRenderTargetView(handles[0], cleaColor, 0, nullptr);
+
+		//コマンドリストをクローズ
+		commandListInstance_.get()->Close();
+
+		//コマンドキューにコマンドリストを送信
+		ID3D12CommandList* ppCommandLists[] = { commandListInstance_.get() };
+		commandQueueInstance_.get()->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
+
+		//プレゼント
+		swaoChainInstance_.get()->Present(1, 0);
+
+		//フェンスにフェンス値を設定
+		commandQueueInstance_.get()->Signal(fenceInstance_.get(), nextFenceValue_);
+		frameFenceValue_[backBufferIndex] = nextFenceValue_;
+		nextFenceValue_++;
 	}
 }
