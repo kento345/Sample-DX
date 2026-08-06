@@ -6,19 +6,20 @@ namespace
 	{
 		switch (msg)
 		{
+		case WM_KEYDOWN:
+			if (wParam == VK_ESCAPE) {
+				DestroyWindow(hwnd);
+				return 0;
+			}
+			break;
+
 		case WM_DESTROY:
 			PostQuitMessage(0);
-			break;
+			return 0;
 
 		case WM_CLOSE:
 			DestroyWindow(hwnd);
-			break;
-		}
-		switch (wParam)
-		{
-		case VK_ESCAPE:
-			DestroyWindow(hwnd);
-			break;
+			return 0;
 		}
 		return DefWindowProc(hwnd, msg, wParam, lParam);
 	}
@@ -63,11 +64,11 @@ bool ScaleWindow::messageLoop() noexcept
 
 HWND ScaleWindow::handle() const noexcept
 {
-	return handle_;
+	return Window_Base::handle();
 }
 
 std::pair<int, int> ScaleWindow::size() const noexcept
 {
-	return { width_, height_ };
+	return Window_Base::size();
 }
 

@@ -19,3 +19,13 @@ bool Window_Base::messageLoop() noexcept
 
     return true;
 }
+
+HWND Window_Base::handle() const noexcept
+{
+    return handle_;
+}
+
+std::pair<int, int> Window_Base::size() const noexcept
+{
+    return { width_, height_ };
+}

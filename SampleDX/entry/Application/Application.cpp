@@ -132,6 +132,7 @@ void Application::loop() noexcept
 		commandAllocatorInstance_[backBufferIndex].reset();
 		// コマンドリストリセット
 		commandListInstance_.reset(commandAllocatorInstance_[backBufferIndex]);
+		
 		//リソースバリアでレンダーターゲットをPresentからRenderTargetへ変更
 		auto pToRT = resourceBarrier(renderTargetInstance_.get(backBufferIndex), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
 		commandListInstance_.get()->ResourceBarrier(1, &pToRT);
@@ -143,6 +144,10 @@ void Application::loop() noexcept
 		//レンダーターゲットのクリア
 		const float	 cleaColor[] = { 1.0f, 1.0f, 0.0f, 1.0f };  // 赤色でクリア
 		commandListInstance_.get()->ClearRenderTargetView(handles[0], cleaColor, 0, nullptr);
+
+		// リソースバリアでレンダーターゲットを RenderTarget から Present へ変更
+		auto rtToP = resourceBarrier(renderTargetInstance_.get(backBufferIndex), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+		commandListInstance_.get()->ResourceBarrier(1, &rtToP);
 
 		//コマンドリストをクローズ
 		commandListInstance_.get()->Close();
@@ -159,4 +164,7 @@ void Application::loop() noexcept
 		frameFenceValue_[backBufferIndex] = nextFenceValue_;
 		nextFenceValue_++;
 	}
+
+	commandQueueInstance_.get()->Signal(fenceInstance_.get(), nextFenceValue_);
+	fenceInstance_.wait(nextFenceValue_);
 }
