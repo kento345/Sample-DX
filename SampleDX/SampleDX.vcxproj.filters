@@ -28,6 +28,12 @@
     <Filter Include="directx">
       <UniqueIdentifier>{b550dbbf-95bc-42fa-ae65-4678bbb33ee7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="asset">
+      <UniqueIdentifier>{49add947-3935-4490-b3a2-d669239ae429}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="draw_resorce">
+      <UniqueIdentifier>{0e81e21b-f3aa-4511-af7a-167dae4dcfa9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="entry\entry.cpp">
@@ -70,6 +76,18 @@
       <Filter>directx</Filter>
     </ClCompile>
     <ClCompile Include="directx\CommandAllocator.cpp">
+      <Filter>directx</Filter>
+    </ClCompile>
+    <ClCompile Include="draw_resource\TrianglePolygon.cpp">
+      <Filter>draw_resorce</Filter>
+    </ClCompile>
+    <ClCompile Include="directx\PiplineStateObject.cpp">
+      <Filter>directx</Filter>
+    </ClCompile>
+    <ClCompile Include="directx\RootSignature.cpp">
+      <Filter>directx</Filter>
+    </ClCompile>
+    <ClCompile Include="directx\Shader.cpp">
       <Filter>directx</Filter>
     </ClCompile>
   </ItemGroup>
@@ -116,5 +134,22 @@
     <ClInclude Include="directx\CommandAllocator.h">
       <Filter>directx</Filter>
     </ClInclude>
+    <ClInclude Include="draw_resource\TrianglePolygon.h">
+      <Filter>draw_resorce</Filter>
+    </ClInclude>
+    <ClInclude Include="directx\PiplineStateObject.h">
+      <Filter>directx</Filter>
+    </ClInclude>
+    <ClInclude Include="directx\RootSignature.h">
+      <Filter>directx</Filter>
+    </ClInclude>
+    <ClInclude Include="directx\Shader.h">
+      <Filter>directx</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="asset\shader.hlsl">
+      <Filter>asset</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

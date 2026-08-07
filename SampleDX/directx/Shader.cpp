@@ -1,0 +1,62 @@
+#include "Shader.h"
+#include<cassert>
+#include<string>
+
+#include<d3dcompiler.h>
+#pragma comment(lib,"d3dcompiler.lib")
+
+Shader::~Shader()
+{
+	//頂点シェーダの解放
+	if (vertexShader_) {
+		vertexShader_->Release();
+		vertexShader_ = nullptr;
+	}
+	//ピクセルシェーダの解放
+	if (pixelShader_) {
+		pixelShader_->Release();
+		pixelShader_ = nullptr;
+	}
+}
+
+bool Shader::create(const Device& device) noexcept
+{
+	//シェーダを読込,コンパイルして生成
+	const std::string filePath = "asset/shader.hlsl";
+	const std::wstring temp = std::wstring(filePath.begin(), filePath.end());
+	//シェーダのコンパイルエラーなどが分かるように
+	ID3DBlob* error{};
+
+	auto res = D3DCompileFromFile(temp.data(), nullptr, nullptr, "vs", "vs_5_0", D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0, &vertexShader_, &error);
+	if (FAILED(res)) {
+		char* p = static_cast<char*>(error->GetBufferPointer());
+		assert(false && "頂点シェーダのコンパイルに失敗\0");
+	}
+	res = D3DCompileFromFile(temp.data(), nullptr, nullptr, "ps", "ps_5_0", D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, 0, &pixelShader_, &error);
+	if (FAILED(res)) {
+		char* p = static_cast<char*>(error->GetBufferPointer());
+		assert(false && "ピクセルシェーダのコンパイルに失敗\0");
+	}
+
+	if (error) {
+		error->Release();
+	}
+
+	return true;
+}
+
+ID3DBlob* Shader::vertexShader() const noexcept
+{
+	if (!vertexShader_) {
+		assert(false && "頂点シェーダが未作成です\0");
+	}
+	return vertexShader_;
+}
+
+ID3DBlob* Shader::pixelShader() const noexcept
+{
+	if (!pixelShader_) {
+		assert(false && "ピクセルシェーダが未作成です\0");
+	}
+	return pixelShader_;
+}

@@ -26,8 +26,12 @@
     <ClCompile Include="directx\Device.cpp" />
     <ClCompile Include="directx\DXGI.cpp" />
     <ClCompile Include="directx\Fence.cpp" />
+    <ClCompile Include="directx\PiplineStateObject.cpp" />
     <ClCompile Include="directx\RenderTarget.cpp" />
+    <ClCompile Include="directx\RootSignature.cpp" />
+    <ClCompile Include="directx\Shader.cpp" />
     <ClCompile Include="directx\SwapChain.cpp" />
+    <ClCompile Include="draw_resource\TrianglePolygon.cpp" />
     <ClCompile Include="entry\Application\Application.cpp" />
     <ClCompile Include="entry\entry.cpp" />
     <ClCompile Include="window\FullWindow.cpp" />
@@ -42,13 +46,22 @@
     <ClInclude Include="directx\Device.h" />
     <ClInclude Include="directx\DXGI.h" />
     <ClInclude Include="directx\Fence.h" />
+    <ClInclude Include="directx\PiplineStateObject.h" />
     <ClInclude Include="directx\RenderTarget.h" />
+    <ClInclude Include="directx\RootSignature.h" />
+    <ClInclude Include="directx\Shader.h" />
     <ClInclude Include="directx\SwapChain.h" />
+    <ClInclude Include="draw_resource\TrianglePolygon.h" />
     <ClInclude Include="entry\Application\Application.h" />
     <ClInclude Include="MoveProhibited\Nomove.h" />
     <ClInclude Include="window\FullWindow.h" />
     <ClInclude Include="window\ScaleWindow.h" />
     <ClInclude Include="window\Window_Base.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="asset\shader.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>

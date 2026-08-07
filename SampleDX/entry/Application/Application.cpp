@@ -94,6 +94,30 @@ bool Application::initialize(HINSTANCE hInstance)
 		assert(false && "フェンスの作成に失敗しました");
 		return false;
 	}
+
+
+	//三角形ポリゴンの生成
+	if (!trianglePolygonInstance_.create(deviceInstance_)) {
+		assert(false && "三角形ポリゴンの作成に失敗しました");
+		return false;
+	}
+	//ルートシグネチャの生成
+	if (!rootSignatureInstance_.create(deviceInstance_)) {
+		assert(false && "ルートシグネチャの作成に失敗しました");
+		return false;
+	}
+	//シェーダの生成
+	if (!shaderInstance_.create(deviceInstance_)) {
+		assert(false && "シェーダーの作成に失敗しました");
+		return false;
+	}
+	//パイプラインステートオブジェクトの生成
+	if (!piplineStateObjectInstance_.create(deviceInstance_, shaderInstance_, rootSignatureInstance_)) {
+		assert(false && "パイプラインステートオブジェクトの作成に失敗しました");
+		return false;
+	}
+
+
 	return true;
 }
 
@@ -142,8 +166,38 @@ void Application::loop() noexcept
 		commandListInstance_.get()->OMSetRenderTargets(1, handles, false, nullptr);
 
 		//レンダーターゲットのクリア
-		const float	 cleaColor[] = { 1.0f, 1.0f, 0.0f, 1.0f };  // 赤色でクリア
+		const float	 cleaColor[] = { 0.2f, 0.2f, 0.2f, 1.2f };  // 赤色でクリア
 		commandListInstance_.get()->ClearRenderTargetView(handles[0], cleaColor, 0, nullptr);
+
+		//-----------------
+		//パイプラインステートの設定
+		commandListInstance_.get()->SetPipelineState(piplineStateObjectInstance_.get());
+		//ルートシグネチャの設定
+		commandListInstance_.get()->SetGraphicsRootSignature(rootSignatureInstance_.get());
+
+		//ビューボートの設定
+		const auto [w, h] = windowInstance_->size();
+		D3D12_VIEWPORT viewport{};
+		viewport.TopLeftX = 0.0f;
+		viewport.TopLeftY = 0.0f;
+		viewport.Width = static_cast<float>(w);
+		viewport.Height = static_cast<float>(h);
+		viewport.MinDepth = 0.0f;
+		viewport.MaxDepth = 1.0f;
+		commandListInstance_.get()->RSSetViewports(1, &viewport);
+
+		//シザー短形の設定
+		D3D12_RECT scissorRect{};
+		scissorRect.left = 0;
+		scissorRect.top = 0;
+		scissorRect.right = w;
+		scissorRect.bottom = h;
+		commandListInstance_.get()->RSSetScissorRects(1, &scissorRect);
+		
+		// ポリゴンの描画
+		trianglePolygonInstance_.draw(commandListInstance_);
+
+		//-------------------------------------------------
 
 		// リソースバリアでレンダーターゲットを RenderTarget から Present へ変更
 		auto rtToP = resourceBarrier(renderTargetInstance_.get(backBufferIndex), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);

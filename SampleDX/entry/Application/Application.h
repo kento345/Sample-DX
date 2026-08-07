@@ -14,6 +14,13 @@
 #include"../../directx/DescriptorHeap.h"
 #include"../../directx/RenderTarget.h"
 #include"../../directx/Fence.h"
+#include"../../directx/RootSignature.h"
+#include"../../directx/Shader.h"
+#include"../../directx/PiplineStateObject.h"
+
+#include"../../draw_resource/TrianglePolygon.h"
+
+#include<cassert>
 
 struct HWND__;
 
@@ -61,4 +68,9 @@ private:
 	Fence fenceInstance_{};
 	UINT64 frameFenceValue_[2]{};
 	UINT64 nextFenceValue_ = 1;
+
+	RootSignature rootSignatureInstance_{};
+	Shader shaderInstance_{};
+	PiplineStateObject piplineStateObjectInstance_{};
+	TrianglePolygon trianglePolygonInstance_{};
 };
