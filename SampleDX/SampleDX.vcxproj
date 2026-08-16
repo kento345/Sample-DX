@@ -22,6 +22,7 @@
     <ClCompile Include="directx\CommandAllocator.cpp" />
     <ClCompile Include="directx\CommandList.cpp" />
     <ClCompile Include="directx\CommandQueue.cpp" />
+    <ClCompile Include="directx\ConstantBuffer.cpp" />
     <ClCompile Include="directx\DescriptorHeap.cpp" />
     <ClCompile Include="directx\Device.cpp" />
     <ClCompile Include="directx\DXGI.cpp" />
@@ -34,6 +35,8 @@
     <ClCompile Include="draw_resource\TrianglePolygon.cpp" />
     <ClCompile Include="entry\Application\Application.cpp" />
     <ClCompile Include="entry\entry.cpp" />
+    <ClCompile Include="object\Camera.cpp" />
+    <ClCompile Include="object\Object.cpp" />
     <ClCompile Include="window\FullWindow.cpp" />
     <ClCompile Include="window\ScaleWindow.cpp" />
     <ClCompile Include="window\Window_Base.cpp" />
@@ -42,6 +45,7 @@
     <ClInclude Include="directx\CommandAllocator.h" />
     <ClInclude Include="directx\CommandList.h" />
     <ClInclude Include="directx\CommandQueue.h" />
+    <ClInclude Include="directx\ConstantBuffer.h" />
     <ClInclude Include="directx\DescriptorHeap.h" />
     <ClInclude Include="directx\Device.h" />
     <ClInclude Include="directx\DXGI.h" />
@@ -54,6 +58,8 @@
     <ClInclude Include="draw_resource\TrianglePolygon.h" />
     <ClInclude Include="entry\Application\Application.h" />
     <ClInclude Include="MoveProhibited\Nomove.h" />
+    <ClInclude Include="object\Camera.h" />
+    <ClInclude Include="object\Object.h" />
     <ClInclude Include="window\FullWindow.h" />
     <ClInclude Include="window\ScaleWindow.h" />
     <ClInclude Include="window\Window_Base.h" />

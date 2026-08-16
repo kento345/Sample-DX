@@ -34,13 +34,13 @@
     <Filter Include="draw_resorce">
       <UniqueIdentifier>{0e81e21b-f3aa-4511-af7a-167dae4dcfa9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="object">
+      <UniqueIdentifier>{64390271-526b-4b71-bec6-ba25c77e471d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="entry\entry.cpp">
       <Filter>entry</Filter>
-    </ClCompile>
-    <ClCompile Include="entry\Application\Application.cpp">
-      <Filter>entry\Application</Filter>
     </ClCompile>
     <ClCompile Include="window\FullWindow.cpp">
       <Filter>window</Filter>
@@ -89,6 +89,18 @@
     </ClCompile>
     <ClCompile Include="directx\Shader.cpp">
       <Filter>directx</Filter>
+    </ClCompile>
+    <ClCompile Include="directx\ConstantBuffer.cpp">
+      <Filter>directx</Filter>
+    </ClCompile>
+    <ClCompile Include="object\Camera.cpp">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="object\Object.cpp">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="entry\Application\Application.cpp">
+      <Filter>MoveProhibited</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +157,15 @@
     </ClInclude>
     <ClInclude Include="directx\Shader.h">
       <Filter>directx</Filter>
+    </ClInclude>
+    <ClInclude Include="directx\ConstantBuffer.h">
+      <Filter>directx</Filter>
+    </ClInclude>
+    <ClInclude Include="object\Camera.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="object\Object.h">
+      <Filter>object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

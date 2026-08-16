@@ -17,8 +17,12 @@
 #include"../../directx/RootSignature.h"
 #include"../../directx/Shader.h"
 #include"../../directx/PiplineStateObject.h"
+#include"../../directx/ConstantBuffer.h"
 
 #include"../../draw_resource/TrianglePolygon.h"
+
+#include"../../object/Camera.h"
+#include"../../object/Object.h"
 
 #include<cassert>
 
@@ -55,22 +59,32 @@ public:
 	[[nodiscard]] void loop()noexcept;
 
 private:
-	std::unique_ptr<Window_Base> windowInstance_;
-	DXGI dxgiInstance_{};
-	Device deviceInstance_{};
-	CommandQueue commandQueueInstance_{};
-	SwapChain swaoChainInstance_{};
-	DescriptorHeap descriptorHeapInstance_{};
-	RenderTarget renderTargetInstance_{};
-	CommandAllocator commandAllocatorInstance_[2]{};
-	CommandList commandListInstance_{};
+	std::unique_ptr<Window_Base> windowInstance_;    //ウィンドウインスタンス
+	DXGI dxgiInstance_{};							 //DXGIインスタンス
+	Device deviceInstance_{};						 //デバイスインスタンス
+	CommandQueue commandQueueInstance_{};			 //コマンドキューインスタンス
+	SwapChain swapChainInstance_{};					 //スワップチェインインスタンス
+	DescriptorHeap descriptorHeapInstance_{};		 //ディスクリプタヒープインスタンス
+	RenderTarget renderTargetInstance_{};			 //レンダーターゲットインスタンス
+	CommandAllocator commandAllocatorInstance_[2]{}; //コマンドアロケータインスタンス 
+	CommandList commandListInstance_{};              //コマンドリストインスタンス
 
-	Fence fenceInstance_{};
-	UINT64 frameFenceValue_[2]{};
-	UINT64 nextFenceValue_ = 1;
+	Fence fenceInstance_{};       //フェンスインスタンス
+	UINT64 frameFenceValue_[2]{}; //現在のフレームのフェンス値
+	UINT64 nextFenceValue_ = 1;	  //次のフレームのフェンス値
 
-	RootSignature rootSignatureInstance_{};
-	Shader shaderInstance_{};
-	PiplineStateObject piplineStateObjectInstance_{};
-	TrianglePolygon trianglePolygonInstance_{};
+	RootSignature      rootSignatureInstance_{};                 /// ルートシグネチャインスタンス
+	Shader             shaderInstance_{};                        /// シェーダーインスタンス
+	PiplineStateObject piplineStateObjectInstance_{};            /// パイプラインステートオブジェクトインスタンス
+	DescriptorHeap     constantBufferDescriptorHeapInstance_{};  /// コンスタントバッファ用ディスクリプタヒープインスタンス
+
+	//
+	TrianglePolygon trianglePolygonInstance_{};                /// 三角形ポリゴンインスタンス
+	Object          triangleObjectInstance_{};                 /// 三角形オブジェクトインスタンス
+	ConstantBuffer  trianglePolygonConstantBufferInstance_{};  /// 三角形ポリゴン用コンスタントバッファインスタンス
+
+	//
+	Camera         cameraInstance_{};                /// カメラインスタンス
+	ConstantBuffer cameraConstantBufferInstance_{};  /// カメラ用コンスタントバッファインスタンス
 };
+	

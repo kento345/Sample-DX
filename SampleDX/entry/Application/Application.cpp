@@ -55,19 +55,19 @@ bool Application::initialize(HINSTANCE hInstance)
 	}
 
 	//スワップチェインの生成
-	if (!swaoChainInstance_.create(dxgiInstance_, windowInstance_, commandQueueInstance_)) {
+	if (!swapChainInstance_.create(dxgiInstance_, windowInstance_, commandQueueInstance_)) {
 		assert(false && "スワップチェインの作成に失敗しました");
 		return false;
 	}
 
 	//ディスクリプタヒープの生成
-	if (!descriptorHeapInstance_.create(deviceInstance_, D3D12_DESCRIPTOR_HEAP_TYPE_RTV, swaoChainInstance_.getDesc().BufferCount)) {
+	if (!descriptorHeapInstance_.create(deviceInstance_, D3D12_DESCRIPTOR_HEAP_TYPE_RTV, swapChainInstance_.getDesc().BufferCount)) {
 		assert(false && "ディスクリプタヒープの作成に失敗しました");
 		return false;
 	}
 
 	//レンダーターゲットの生成
-	if (!renderTargetInstance_.createBackBuffer(deviceInstance_, swaoChainInstance_, descriptorHeapInstance_)) {
+	if (!renderTargetInstance_.createBackBuffer(deviceInstance_, swapChainInstance_, descriptorHeapInstance_)) {
 		assert(false && "レンダーターゲットの作成に失敗しました");
 		return false;
 	}
@@ -117,8 +117,32 @@ bool Application::initialize(HINSTANCE hInstance)
 		return false;
 	}
 
+	//カメラの生成
+	cameraInstance_.initialize();
 
-	return true;
+	//定数バッファ用ディスクリプタヒープの生成
+	//定数バッファ用はCBV_SRV_UAV タイプで2つ分確保
+	if (!constantBufferDescriptorHeapInstance_.create(deviceInstance_, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 2, true)) {
+		assert(false && "定数バッファ用ディスクリプタヒープのの作成に失敗しました");
+		return false;
+	}
+
+	//カメラ用コンスタントバッファの作成
+	//カメラ用はディスクリプタヒープの先頭に作成
+	if (!cameraConstantBufferInstance_.create(deviceInstance_, constantBufferDescriptorHeapInstance_, sizeof(Camera::ConstBufferData), 0)) {
+		assert(false && "カメラ用コンスタントバッファの作成に失敗しました");
+		return false;
+	}
+
+	//三角形ポリゴン用コンスタントバッファの作成
+	//三角形ポリゴン用はディスクリプタヒープの2番目に作成
+	if (!trianglePolygonConstantBufferInstance_.create(deviceInstance_, constantBufferDescriptorHeapInstance_, sizeof(TrianglePolygon::ConstBufferData), 1)) {
+		assert(false && "三角形ポリゴン用コンスタントバッファの作成に失敗しました");
+		return false;
+	}
+
+
+    return true;
 }
 
 /// <summary>
@@ -144,8 +168,13 @@ void Application::loop() noexcept
 {
 	while (windowInstance_->messageLoop())
 	{
+		//カメラの更新
+		cameraInstance_.update();
+		//三角形オブジェクトの更新
+		triangleObjectInstance_.update();
+
 		// 現在のバックバッファインデックスを取得
-		const auto backBufferIndex = swaoChainInstance_.get()->GetCurrentBackBufferIndex();
+		const auto backBufferIndex = swapChainInstance_.get()->GetCurrentBackBufferIndex();
 
 		// 以前のフレームの GPU の処理が完了しているか確認して待機する
 		if (frameFenceValue_[backBufferIndex] != 0) {
@@ -193,7 +222,33 @@ void Application::loop() noexcept
 		scissorRect.right = w;
 		scissorRect.bottom = h;
 		commandListInstance_.get()->RSSetScissorRects(1, &scissorRect);
-		
+
+		//コンスタントバッファ用ディスクリプタヒープの設定
+		ID3D12DescriptorHeap* p[] = { constantBufferDescriptorHeapInstance_.get() };
+		commandListInstance_.get()->SetDescriptorHeaps(1, p);
+
+		// カメラのコンスタントバッファへデータ転送
+		Camera::ConstBufferData cameraData{
+			DirectX::XMMatrixTranspose(cameraInstance_.viewMatrix()),
+			DirectX::XMMatrixTranspose(cameraInstance_.projection()),
+		};
+		UINT8* pCameraData{};
+		cameraConstantBufferInstance_.constantBuffer()->Map(0, nullptr, reinterpret_cast<void**>(&pCameraData));
+		memcpy_s(pCameraData, sizeof(cameraData), &cameraData, sizeof(cameraData));
+		cameraConstantBufferInstance_.constantBuffer()->Unmap(0, nullptr);
+		commandListInstance_.get()->SetGraphicsRootDescriptorTable(0, cameraConstantBufferInstance_.getGpuDescriptorHandle());
+
+		// 三角形ポリゴンのコンスタントバッファへデータ転送
+		TrianglePolygon::ConstBufferData triangleData{
+			DirectX::XMMatrixTranspose(triangleObjectInstance_.world()),
+			triangleObjectInstance_.color() };
+		UINT8* pTriangleData{};
+		trianglePolygonConstantBufferInstance_.constantBuffer()->Map(0, nullptr, reinterpret_cast<void**>(&pTriangleData));
+		memcpy_s(pTriangleData, sizeof(triangleData), &triangleData, sizeof(triangleData));
+		trianglePolygonConstantBufferInstance_.constantBuffer()->Unmap(0, nullptr);
+		commandListInstance_.get()->SetGraphicsRootDescriptorTable(1, trianglePolygonConstantBufferInstance_.getGpuDescriptorHandle());
+
+
 		// ポリゴンの描画
 		trianglePolygonInstance_.draw(commandListInstance_);
 
@@ -211,7 +266,7 @@ void Application::loop() noexcept
 		commandQueueInstance_.get()->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
 
 		//プレゼント
-		swaoChainInstance_.get()->Present(1, 0);
+		swapChainInstance_.get()->Present(1, 0);
 
 		//フェンスにフェンス値を設定
 		commandQueueInstance_.get()->Signal(fenceInstance_.get(), nextFenceValue_);

@@ -2,9 +2,19 @@
 
 #include"../directx/Device.h"
 #include"../directx/CommandList.h"
+#include<DirectXMath.h>
 
 class TrianglePolygon final
 {
+public:
+	/// <summary>
+	/// コンスタントバッファ用データ構造
+	/// </summary>
+	struct ConstBufferData {
+		DirectX::XMMATRIX world_{};  /// ワールド行列
+		DirectX::XMFLOAT4 color_{};  /// カラー(RGBA)
+	};
+
 public:
 	/// <summary>
 	/// コンストラクタ
