@@ -1,4 +1,5 @@
-#include "Window_Base.h"
+﻿#include "Window_Base.h"
+#include"Input.h"
 
 /// <summary>
 /// メッセージループ
@@ -15,6 +16,12 @@ bool Window_Base::messageLoop() noexcept
         // メッセージ処理
         TranslateMessage(&msg);
         DispatchMessage(&msg);
+
+        //キー情報の取得
+        static byte keyState[256]{};
+        if (GetKeyboardState(keyState)) {
+            Input::instance().updateKeyState(keyState);
+        }
     }
 
     return true;

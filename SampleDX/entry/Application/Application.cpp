@@ -1,4 +1,4 @@
-#include<Windows.h>
+﻿#include<Windows.h>
 #include<cassert>
 
 #include "Application.h"
@@ -101,6 +101,9 @@ bool Application::initialize(HINSTANCE hInstance)
 		assert(false && "三角形ポリゴンの作成に失敗しました");
 		return false;
 	}
+
+	triangleObjectInstance_.initialize({0.f,0.f,0.f}, {0.1f,0.1f,0.1f,1.0f});
+
 	//ルートシグネチャの生成
 	if (!rootSignatureInstance_.create(deviceInstance_)) {
 		assert(false && "ルートシグネチャの作成に失敗しました");

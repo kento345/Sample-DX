@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include<DirectXMath.h>
 
@@ -22,6 +22,8 @@ public:
 	/// </summary>
 	~Object() = default;
 
+	void initialize(DirectX::XMFLOAT3 pos,DirectX::XMFLOAT4 color)noexcept;
+
 	/// <summary>
 	/// オブジェクトの更新
 	/// </summary>
@@ -44,5 +46,6 @@ private:
 	DirectX::XMFLOAT4 color_ = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f); //カラー(RGBA)
 
 	float move_{}; //移動速度
+	DirectX::XMFLOAT3 position_{};
 };
 

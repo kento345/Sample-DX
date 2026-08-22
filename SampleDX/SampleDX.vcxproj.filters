@@ -102,6 +102,9 @@
     <ClCompile Include="entry\Application\Application.cpp">
       <Filter>entry\Application</Filter>
     </ClCompile>
+    <ClCompile Include="window\Input.cpp">
+      <Filter>window</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="entry\Application\Application.h">
@@ -166,6 +169,9 @@
     </ClInclude>
     <ClInclude Include="object\Object.h">
       <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="window\Input.h">
+      <Filter>window</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

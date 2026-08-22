@@ -1,12 +1,10 @@
-#include "Camera.h"
-#include<cmath>
+﻿#include "Camera.h"
 
 namespace {
 	//定数
 	constexpr float eyeMoveSpeed_ = 0.06f;     //カメラ移動速度
 	constexpr float destTargetToView_ = -5.0f; //注視点カメラまでの距離
 }
-
 
 void Camera::initialize() noexcept
 {
@@ -29,9 +27,6 @@ void Camera::initialize() noexcept
 void Camera::update() noexcept
 {
 	static float angle = 0.0f;
-	angle += eyeMoveSpeed_;
-	position_.x = destTargetToView_ * std::sinf(angle);
-	position_.z = destTargetToView_ * std::cosf(angle);
 
 	//ビュー行列計算
 	view_ = DirectX::XMMatrixLookAtLH(

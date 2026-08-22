@@ -38,6 +38,7 @@
     <ClCompile Include="object\Camera.cpp" />
     <ClCompile Include="object\Object.cpp" />
     <ClCompile Include="window\FullWindow.cpp" />
+    <ClCompile Include="window\Input.cpp" />
     <ClCompile Include="window\ScaleWindow.cpp" />
     <ClCompile Include="window\Window_Base.cpp" />
   </ItemGroup>
@@ -61,6 +62,7 @@
     <ClInclude Include="object\Camera.h" />
     <ClInclude Include="object\Object.h" />
     <ClInclude Include="window\FullWindow.h" />
+    <ClInclude Include="window\Input.h" />
     <ClInclude Include="window\ScaleWindow.h" />
     <ClInclude Include="window\Window_Base.h" />
   </ItemGroup>
