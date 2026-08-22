@@ -1,10 +1,21 @@
-#pragma once
+﻿#pragma once
 
 #include"../directx/Device.h"
 #include"../directx/CommandList.h"
+
+#include"TempletePolygon.h"
+
 #include<DirectXMath.h>
 
-class TrianglePolygon final
+namespace {
+	struct Vertex
+	{
+		DirectX::XMFLOAT3 position;
+		DirectX::XMFLOAT4 color;
+	};
+}
+
+class TrianglePolygon : public TempletePolygon<Vertex>
 {
 public:
 	/// <summary>
@@ -14,6 +25,7 @@ public:
 		DirectX::XMMATRIX world_{};  /// ワールド行列
 		DirectX::XMFLOAT4 color_{};  /// カラー(RGBA)
 	};
+
 
 public:
 	/// <summary>
@@ -39,28 +51,35 @@ public:
 	/// <param name="commandList"></param>
 	[[nodiscard]] void draw(const CommandList& commandList)noexcept;
 
-private:
-
+private	:
 	/// <summary>
-	/// 頂点バッファの生成
+	///	頂点バッファの作成
 	/// </summary>
 	/// <param name="device"></param>
 	/// <returns></returns>
-	[[nodiscard]] bool createVerttexBuffer(const Device& device)noexcept;
-
+	[[nodiscard]]bool createVerttexBuffer(const Device& device)noexcept;
+	
 	/// <summary>
-	/// インデクスバッファの生成
+	/// インデックスバッファの作成
 	/// </summary>
 	/// <param name="device"></param>
 	/// <returns></returns>
-	[[nodiscard]] bool createIndexBuffer(const Device& device)noexcept;
-
+	[[nodiscard]]bool createIndexBuffer(const Device& device)noexcept;
 
 private:
-	ID3D12Resource* vertexBuffer_{}; //頂点バッファ
-	ID3D12Resource* indexBuffer_{};	 //インデックスバッファ
-
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{}; //頂点バッファビュー
-	D3D12_INDEX_BUFFER_VIEW indexBufferView_{};	   //インデックスバッファビュー
+	PolygonData triangleData_{
+		{
+		   { { 0.0f,  1.0f,  0.0f}, {1.0f, 0.0f, 0.0f, 1.0f} },//上
+		   { { 0.0f, -0.5f,  0.8f}, {0.0f, 1.0f, 0.0f, 1.0f} },//下
+		   { {-0.8f, -0.5f, -0.4f}, {0.0f, 0.0f, 1.0f, 1.0f} },//左
+		   { { 0.8f, -0.5f, -0.4f}, {1.0f, 1.0f, 0.0f, 1.0f} },//右
+	    },
+	    {
+	       0, 1, 2,
+	       0, 3, 1,
+	       0, 2, 3,
+	       1, 3, 2
+	    }
+    };
 };
 

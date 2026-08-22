@@ -105,6 +105,12 @@
     <ClCompile Include="window\Input.cpp">
       <Filter>window</Filter>
     </ClCompile>
+    <ClCompile Include="draw_resource\TempletePolygon.cpp">
+      <Filter>draw_resorce</Filter>
+    </ClCompile>
+    <ClCompile Include="draw_resource\QuadPolygon.cpp">
+      <Filter>draw_resorce</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="entry\Application\Application.h">
@@ -172,6 +178,12 @@
     </ClInclude>
     <ClInclude Include="window\Input.h">
       <Filter>window</Filter>
+    </ClInclude>
+    <ClInclude Include="draw_resource\TempletePolygon.h">
+      <Filter>draw_resorce</Filter>
+    </ClInclude>
+    <ClInclude Include="draw_resource\QuadPolygon.h">
+      <Filter>draw_resorce</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

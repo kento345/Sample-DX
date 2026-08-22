@@ -1,4 +1,4 @@
-#pragma
+﻿#pragma
 
 #include<memory>
 
@@ -20,6 +20,8 @@
 #include"../../directx/ConstantBuffer.h"
 
 #include"../../draw_resource/TrianglePolygon.h"
+
+#include"../../draw_resource/QuadPolygon.h"
 
 #include"../../object/Camera.h"
 #include"../../object/Object.h"
