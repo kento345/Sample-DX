@@ -80,12 +80,16 @@ private:
 	PiplineStateObject piplineStateObjectInstance_{};            /// パイプラインステートオブジェクトインスタンス
 	DescriptorHeap     constantBufferDescriptorHeapInstance_{};  /// コンスタントバッファ用ディスクリプタヒープインスタンス
 
-	//
+	//三角形ポリゴン
 	TrianglePolygon trianglePolygonInstance_{};                /// 三角形ポリゴンインスタンス
 	Object          triangleObjectInstance_{};                 /// 三角形オブジェクトインスタンス
 	ConstantBuffer  trianglePolygonConstantBufferInstance_{};  /// 三角形ポリゴン用コンスタントバッファインスタンス
 
-	//
+	//四角形ポリゴン
+	QuadPolygon quadPolygonInstance_{};					//四角形ポリゴンインスタンス
+	//ConstantBuffer quadPolygonConstanBufferInstance_{}; //四角形ポリゴン用コンスタントバッファインスタンス
+
+	//カメラ
 	Camera         cameraInstance_{};                /// カメラインスタンス
 	ConstantBuffer cameraConstantBufferInstance_{};  /// カメラ用コンスタントバッファインスタンス
 };

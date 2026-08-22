@@ -19,13 +19,13 @@ TrianglePolygon::~TrianglePolygon()
 bool TrianglePolygon::create(const Device& device) noexcept
 {
 	//頂点バッファの生成
-	if (!createVerttexBuffer(device))
+	if (!TempletePolygon::createVerttexBuffer(device,triangleData_.vertices))
 	{
 		assert(false && "頂点バッファの作成に失敗\0");
 		return false;
 	}
 	//インデックスバッファの生成
-	if (!createIndexBuffer(device)) 
+	if (!TempletePolygon::createIndexBuffer(device,triangleData_.indices))
 	{
 		assert(false && "インデックスバッファの作成に失敗\0");
 		return false;
@@ -43,14 +43,4 @@ void TrianglePolygon::draw(const CommandList& commandList) noexcept
 	commandList.get()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	//描画コマンド
 	commandList.get()->DrawIndexedInstanced(triangleData_.indices.size(), 1, 0, 0, 0);
-}
-
-bool TrianglePolygon::createVerttexBuffer(const Device& device) noexcept
-{
-	return TempletePolygon::createVerttexBuffer(device,triangleData_.vertices);
-}
-
-bool TrianglePolygon::createIndexBuffer(const Device& device) noexcept
-{
-	return TempletePolygon::createIndexBuffer(device,triangleData_.indices);
 }

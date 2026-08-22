@@ -51,21 +51,6 @@ public:
 	/// <param name="commandList"></param>
 	[[nodiscard]] void draw(const CommandList& commandList)noexcept;
 
-private	:
-	/// <summary>
-	///	頂点バッファの作成
-	/// </summary>
-	/// <param name="device"></param>
-	/// <returns></returns>
-	[[nodiscard]]bool createVerttexBuffer(const Device& device)noexcept;
-	
-	/// <summary>
-	/// インデックスバッファの作成
-	/// </summary>
-	/// <param name="device"></param>
-	/// <returns></returns>
-	[[nodiscard]]bool createIndexBuffer(const Device& device)noexcept;
-
 private:
 	PolygonData triangleData_{
 		{

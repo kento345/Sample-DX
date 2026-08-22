@@ -13,6 +13,7 @@ namespace {
 
 class QuadPolygon : public TempletePolygon<Vector>
 {
+public:
 	/// <summary>
 	/// コンスタントバッファ用データ構造
 	/// </summary>
@@ -44,21 +45,6 @@ public:
 	/// </summary>
 	/// <param name="commandList"></param>
 	[[nodiscard]] void draw(const CommandList& commandList)noexcept;
-
-private:
-	/// <summary>
-	///	頂点バッファの作成
-	/// </summary>
-	/// <param name="device"></param>
-	/// <returns></returns>
-	[[nodiscard]] bool createVerttexBuffer(const Device& device)noexcept;
-
-	/// <summary>
-	/// インデックスバッファの作成
-	/// </summary>
-	/// <param name="device"></param>
-	/// <returns></returns>
-	[[nodiscard]] bool createIndexBuffer(const Device& device)noexcept;
 
 private:
 	PolygonData quadData{

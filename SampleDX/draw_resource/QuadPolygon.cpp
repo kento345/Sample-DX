@@ -19,13 +19,13 @@ QuadPolygon::~QuadPolygon()
 bool QuadPolygon::create(const Device& device) noexcept
 {
 	//頂点バッファの生成
-	if (!createVerttexBuffer(device))
+	if (!TempletePolygon::createVerttexBuffer(device, quadData.vertices))
 	{
 		assert(false && "頂点バッファの作成に失敗\0");
 		return false;
 	}
 	//インデックスバッファの生成
-	if (!createIndexBuffer(device))
+	if (!TempletePolygon::createIndexBuffer(device, quadData.indices))
 	{
 		assert(false && "インデックスバッファの作成に失敗\0");
 		return false;
@@ -43,14 +43,4 @@ void QuadPolygon::draw(const CommandList& commandList) noexcept
 	commandList.get()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	//描画コマンド
 	commandList.get()->DrawIndexedInstanced(quadData.indices.size(), 1, 0, 0, 0);
-}
-
-bool QuadPolygon::createVerttexBuffer(const Device& device) noexcept
-{
-	return TempletePolygon::createVerttexBuffer(device,quadData.vertices);
-}
-
-bool QuadPolygon::createIndexBuffer(const Device& device) noexcept
-{
-	return TempletePolygon::createIndexBuffer(device,quadData.indices);
 }
