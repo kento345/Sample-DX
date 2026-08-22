@@ -18,7 +18,7 @@ void Camera::initialize() noexcept
 	up_ = DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f);
 
 	//プロジェクション行列の設定
-	projection_ - DirectX::XMMatrixPerspectiveFovLH(
+	projection_ = DirectX::XMMatrixPerspectiveFovLH(
 		DirectX::XM_PIDIV4, //視野角45度
 		1280.0f / 720.0f,	//アスペクト比
 		0.1f,				//ニアクリップ

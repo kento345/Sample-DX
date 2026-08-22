@@ -60,7 +60,7 @@ private:
 	ID3D12Resource* vertexBuffer_{}; //頂点バッファ
 	ID3D12Resource* indexBuffer_{};	 //インデックスバッファ
 
-	D3D12_VERTEX_BUFFER_VIEW verttexBufferView_{}; //頂点バッファビュー
+	D3D12_VERTEX_BUFFER_VIEW vertexBufferView_{}; //頂点バッファビュー
 	D3D12_INDEX_BUFFER_VIEW indexBufferView_{};	   //インデックスバッファビュー
 };
 

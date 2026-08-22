@@ -28,10 +28,12 @@ bool TrianglePolygon::create(const Device& device) noexcept
 {
 	//頂点バッファの生成
 	if (!createVerttexBuffer(device)) {
+		assert(false && "頂点バッファの作成に失敗\0");
 		return false;
 	}
 	//インデックスバッファの生成
 	if (!createIndexBuffer(device)) {
+		assert(false && "インデックスバッファの作成に失敗\0");
 		return false;
 	}
 	return true;
@@ -41,9 +43,17 @@ bool TrianglePolygon::createVerttexBuffer(const Device& device) noexcept
 {
 	//三角形の頂点データ
 	Vertex triangleVertices[] = {
-		{{ 0.0f, 0.5f, 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f}}, // 上頂点（赤色）
-		{{ 0.5f,-0.5f, 0.0f}, {0.0f, 1.0f, 0.0f, 1.0f}}, // 右下頂点（緑色）
-		{{-0.5f,-0.5f, 0.0f}, {0.0f, 0.0f, 1.0f, 1.0f}}  // 左下頂点（青色）
+		// 上
+        {{ 0.0f,  1.0f,  0.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+        
+        // 前
+        {{ 0.0f, -0.5f,  0.8f}, {0.0f, 1.0f, 0.0f, 1.0f}},
+        
+        // 左
+        {{-0.8f, -0.5f, -0.4f}, {0.0f, 0.0f, 1.0f, 1.0f}},
+        
+        // 右
+        {{ 0.8f, -0.5f, -0.4f}, {1.0f, 1.0f, 0.0f, 1.0f}},
 	};
 
 	//頂点データサイズ
@@ -105,22 +115,26 @@ bool TrianglePolygon::createVerttexBuffer(const Device& device) noexcept
 	vertexBuffer_->Unmap(0, nullptr);
 
 	//頂点バッファビューの設定
-	verttexBufferView_.BufferLocation = vertexBuffer_->GetGPUVirtualAddress();
-	verttexBufferView_.SizeInBytes = vertexBufferSize;
-	verttexBufferView_.StrideInBytes = sizeof(Vertex);
+	vertexBufferView_.BufferLocation = vertexBuffer_->GetGPUVirtualAddress();
+	vertexBufferView_.SizeInBytes = vertexBufferSize;
+	vertexBufferView_.StrideInBytes = sizeof(Vertex);
 
 	return true;
 }
 
-bool TrianglePolygon::createIndexBuffer(const Device& device) noexcept
+[[nodiscard]]bool TrianglePolygon::createIndexBuffer(const Device& device) noexcept
 {
 	//三角形の頂点データ
 	uint16_t triangleIndeces[] = {
-		0,1,2 //三角形を構成する頂点インデックス
+		 0, 1, 2,  // 前面
+	     0, 3, 1,  // 右面
+	     0, 2, 3,  // 左面
+	     1, 3, 2   // 底面
 	};
 
 	//インデックスデータのサイズ
-	const auto indexBufferSize = sizeof(triangleIndeces);
+	const auto indexBufferSize = sizeof(triangleIndeces);/*sizeof(uint16_t) * 3;*/
+		
 
 	//ヒープの設定を指定
 	//CPUからアクセス可能なメモリーを利用するための設定
@@ -170,11 +184,13 @@ bool TrianglePolygon::createIndexBuffer(const Device& device) noexcept
 	}
 
 	//頂点データをコピー
+	//memcpy(data, triangleIndeces, indexBufferSize);
+
 	memcpy_s(data, indexBufferSize, triangleIndeces, indexBufferSize);
 
 	//コピーが終わったのでマップ削除(CPUからアクセス不可にする)
 	//ここまで来たらGPUが利用するメモリ領域にコピー済みなのでtriangleVertices は不要になる
-	vertexBuffer_->Unmap(0, nullptr);
+	indexBuffer_->Unmap(0, nullptr);
 
 	//頂点バッファビューの設定
 	indexBufferView_.BufferLocation = indexBuffer_->GetGPUVirtualAddress();
@@ -187,11 +203,11 @@ bool TrianglePolygon::createIndexBuffer(const Device& device) noexcept
 void TrianglePolygon::draw(const CommandList& commandList) noexcept
 {
 	//頂点バッファの設定
-	commandList.get()->IASetVertexBuffers(0, 1, &verttexBufferView_);
+	commandList.get()->IASetVertexBuffers(0, 1, &vertexBufferView_);
 	//インデックスバッファの設定
 	commandList.get()->IASetIndexBuffer(&indexBufferView_);
 	//プリミティブ形状の設定(三角形)
 	commandList.get()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	//描画コマンド
-	commandList.get()->DrawIndexedInstanced(3, 2, 0, 0, 0);
+	commandList.get()->DrawIndexedInstanced(12, 1, 0, 0, 0);
 }

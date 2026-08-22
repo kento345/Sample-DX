@@ -204,7 +204,7 @@ void Application::loop() noexcept
 		//ルートシグネチャの設定
 		commandListInstance_.get()->SetGraphicsRootSignature(rootSignatureInstance_.get());
 
-		//ビューボートの設定
+		//ビューポートの設定
 		const auto [w, h] = windowInstance_->size();
 		D3D12_VIEWPORT viewport{};
 		viewport.TopLeftX = 0.0f;
@@ -251,7 +251,6 @@ void Application::loop() noexcept
 
 		// ポリゴンの描画
 		trianglePolygonInstance_.draw(commandListInstance_);
-
 		//-------------------------------------------------
 
 		// リソースバリアでレンダーターゲットを RenderTarget から Present へ変更

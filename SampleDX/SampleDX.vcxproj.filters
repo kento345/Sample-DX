@@ -100,7 +100,7 @@
       <Filter>object</Filter>
     </ClCompile>
     <ClCompile Include="entry\Application\Application.cpp">
-      <Filter>MoveProhibited</Filter>
+      <Filter>entry\Application</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
