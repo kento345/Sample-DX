@@ -2,19 +2,20 @@
 
 #include"DXGI.h"
 #include<d3d12.h>
+#include<wrl/client.h>
+
 
 class Device final
 {
 public:
 	/// <summary>
-	/// コンストラクタ
+	/// インスタンス取得
 	/// </summary>
-	Device() = default;
-
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
-	~Device();
+	/// <returns></returns>
+	static Device& instance() noexcept {
+		static Device instance;
+		return instance;
+	}
 
 	/// <summary>
 	/// デバイスの作成

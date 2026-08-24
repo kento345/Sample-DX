@@ -8,19 +8,19 @@
 template <class T>
 class TempletePolygon
 {
-protected:
+public:
 	
 	TempletePolygon() = default;
-	~TempletePolygon() = default;
+
+	virtual ~TempletePolygon() = default;
+
+protected:
 
 	struct PolygonData
 	{
 		std::vector<T> vertices;
 		std::vector<uint16_t> indices;
 	};
-
-
-protected:
 
 	/// <summary>
 	/// 頂点バッファの生成

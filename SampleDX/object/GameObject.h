@@ -2,7 +2,7 @@
 
 #include<DirectXMath.h>
 
-class Object final
+class GameObject 
 {
 public:
 	struct ConstBufferData
@@ -15,19 +15,19 @@ public:
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
-	Object() = default;
+	GameObject() = default;
 
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~Object() = default;
+	virtual ~GameObject() = default;
 
-	void initialize(DirectX::XMFLOAT3 pos,DirectX::XMFLOAT4 color)noexcept;
+	virtual void initialize(DirectX::XMFLOAT3 pos,DirectX::XMFLOAT4 color)noexcept;
 
 	/// <summary>
 	/// オブジェクトの更新
 	/// </summary>
-	void update() noexcept;
+	virtual void update() noexcept;
 
 	/// <summary>
 	/// ワールド行列の取得
@@ -41,7 +41,7 @@ public:
 	/// <returns></returns>
 	[[nodiscard]] DirectX::XMFLOAT4 color()const noexcept;
 
-private:
+protected:
 	DirectX::XMMATRIX world_ = DirectX::XMMatrixIdentity();				  //ワールド行列
 	DirectX::XMFLOAT4 color_ = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f); //カラー(RGBA)
 

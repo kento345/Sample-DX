@@ -20,11 +20,13 @@
 #include"../../directx/ConstantBuffer.h"
 
 #include"../../draw_resource/TrianglePolygon.h"
+#include"../../object/Player.h"
 
 #include"../../draw_resource/QuadPolygon.h"
+#include"../../object/Enemy.h"
 
 #include"../../object/Camera.h"
-#include"../../object/Object.h"
+
 
 #include<cassert>
 
@@ -82,12 +84,13 @@ private:
 
 	//三角形ポリゴン
 	TrianglePolygon trianglePolygonInstance_{};                /// 三角形ポリゴンインスタンス
-	Object          triangleObjectInstance_{};                 /// 三角形オブジェクトインスタンス
+	Player          triangleObjectInstance_{};                 /// 三角形オブジェクトインスタンス
 	ConstantBuffer  trianglePolygonConstantBufferInstance_{};  /// 三角形ポリゴン用コンスタントバッファインスタンス
 
 	//四角形ポリゴン
-	QuadPolygon quadPolygonInstance_{};					//四角形ポリゴンインスタンス
-	//ConstantBuffer quadPolygonConstanBufferInstance_{}; //四角形ポリゴン用コンスタントバッファインスタンス
+	QuadPolygon    quadPolygonInstance_{};				//四角形ポリゴンインスタンス
+	Enemy          quadObjectInstance_{};               //四角形オブジェクトインスタンス
+	ConstantBuffer quadPolygonConstanBufferInstance_{}; //四角形ポリゴン用コンスタントバッファインスタンス
 
 	//カメラ
 	Camera         cameraInstance_{};                /// カメラインスタンス

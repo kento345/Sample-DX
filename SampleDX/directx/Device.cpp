@@ -4,13 +4,6 @@
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxguid.lib")
 
-Device::~Device()
-{
-	//デバイスの解放
-	device_->Release();
-	device_ = nullptr;
-}
-
 bool Device::create(const DXGI& dxgi) noexcept
 {
 	const auto hr = D3D12CreateDevice(dxgi.displayAdapter(), D3D_FEATURE_LEVEL_12_0, IID_PPV_ARGS(&device_));

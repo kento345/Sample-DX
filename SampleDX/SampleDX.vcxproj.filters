@@ -96,7 +96,7 @@
     <ClCompile Include="object\Camera.cpp">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="object\Object.cpp">
+    <ClCompile Include="object\GameObject.cpp">
       <Filter>object</Filter>
     </ClCompile>
     <ClCompile Include="entry\Application\Application.cpp">
@@ -110,6 +110,15 @@
     </ClCompile>
     <ClCompile Include="draw_resource\QuadPolygon.cpp">
       <Filter>draw_resorce</Filter>
+    </ClCompile>
+    <ClCompile Include="object\Player.cpp">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="object\Enemy.cpp">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="directx\DepthBuffer.cpp">
+      <Filter>directx</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -173,7 +182,7 @@
     <ClInclude Include="object\Camera.h">
       <Filter>object</Filter>
     </ClInclude>
-    <ClInclude Include="object\Object.h">
+    <ClInclude Include="object\GameObject.h">
       <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="window\Input.h">
@@ -184,6 +193,15 @@
     </ClInclude>
     <ClInclude Include="draw_resource\QuadPolygon.h">
       <Filter>draw_resorce</Filter>
+    </ClInclude>
+    <ClInclude Include="object\Player.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="object\Enemy.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="directx\DepthBuffer.h">
+      <Filter>directx</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

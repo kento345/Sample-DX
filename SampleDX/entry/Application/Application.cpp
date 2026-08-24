@@ -109,7 +109,7 @@ bool Application::initialize(HINSTANCE hInstance)
 		assert(false && "四角形ポリゴンの作成に失敗しました");
 		return false;
 	}
-	
+	quadObjectInstance_.initialize({ 2.f,0.f,1.f }, { 1.f,0.f,0.f,1.f });
 
 	//ルートシグネチャの生成
 	if (!rootSignatureInstance_.create(deviceInstance_)) {
@@ -132,7 +132,7 @@ bool Application::initialize(HINSTANCE hInstance)
 
 	//定数バッファ用ディスクリプタヒープの生成
 	//定数バッファ用はCBV_SRV_UAV タイプで2つ分確保
-	if (!constantBufferDescriptorHeapInstance_.create(deviceInstance_, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 2, true)) {
+	if (!constantBufferDescriptorHeapInstance_.create(deviceInstance_, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 3, true)) {
 		assert(false && "定数バッファ用ディスクリプタヒープのの作成に失敗しました");
 		return false;
 	}
@@ -151,11 +151,11 @@ bool Application::initialize(HINSTANCE hInstance)
 		return false;
 	}
 
-/*	//四角形ポリゴン用コンスタントバッファの作成
+	//四角形ポリゴン用コンスタントバッファの作成
 	if (!quadPolygonConstanBufferInstance_.create(deviceInstance_, constantBufferDescriptorHeapInstance_, sizeof(QuadPolygon::ConstBufferData), 2)) {
 		assert(false && "四角形ポリゴン用コンスタントバッファの作成に失敗しました");
 		return false;
-	}*/
+	}
 
 
     return true;
@@ -188,6 +188,8 @@ void Application::loop() noexcept
 		cameraInstance_.update();
 		//三角形オブジェクトの更新
 		triangleObjectInstance_.update();
+		//四角形オブジェクトの更新
+		quadObjectInstance_.update();
 		
 
 		// 現在のバックバッファインデックスを取得
@@ -273,6 +275,15 @@ void Application::loop() noexcept
 		}
 
 		{
+			QuadPolygon::ConstBufferData quadData{
+				DirectX::XMMatrixTranspose(quadObjectInstance_.world()),
+				quadObjectInstance_.color() };
+			UINT8* pQuadData{};
+			quadPolygonConstanBufferInstance_.constantBuffer()->Map(0, nullptr, reinterpret_cast<void**>(&pQuadData));
+			memcpy_s(pQuadData, sizeof(quadData), &quadData, sizeof(quadData));
+			quadPolygonConstanBufferInstance_.constantBuffer()->Unmap(0, nullptr);
+			commandListInstance_.get()->SetGraphicsRootDescriptorTable(1, quadPolygonConstanBufferInstance_.getGpuDescriptorHandle());
+
 			quadPolygonInstance_.draw(commandListInstance_);
 		}
 		//-------------------------------------------------
