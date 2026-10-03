@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include"Device.h"
 
@@ -18,7 +18,7 @@ public:
 	/// </summary>
 	/// <param name="device"></param>
 	/// <returns></returns>
-	[[nodiscard]] bool create(const Device& device) noexcept;
+	[[nodiscard]] bool create() noexcept;
 
 	/// <summary>
 	/// 同期待ちを行う

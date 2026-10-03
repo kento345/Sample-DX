@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include"Device.h"
 
 class CommandAllocator final
@@ -20,7 +20,7 @@ public:
 	/// <param name="device"></param>
 	/// <param name="type"></param>
 	/// <returns></returns>
-	[[nodiscard]] bool create(const Device& device, const D3D12_COMMAND_LIST_TYPE type)noexcept;
+	[[nodiscard]] bool create(const D3D12_COMMAND_LIST_TYPE type)noexcept;
 
 	/// <summary>
 	/// コマンドアロケータのリセット

@@ -120,6 +120,9 @@
     <ClCompile Include="directx\DepthBuffer.cpp">
       <Filter>directx</Filter>
     </ClCompile>
+    <ClCompile Include="object\Object.cpp">
+      <Filter>object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="entry\Application\Application.h">
@@ -202,6 +205,12 @@
     </ClInclude>
     <ClInclude Include="directx\DepthBuffer.h">
       <Filter>directx</Filter>
+    </ClInclude>
+    <ClInclude Include="object\Object.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="util.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

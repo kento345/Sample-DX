@@ -41,6 +41,7 @@
     <ClCompile Include="object\Camera.cpp" />
     <ClCompile Include="object\Enemy.cpp" />
     <ClCompile Include="object\GameObject.cpp" />
+    <ClCompile Include="object\Object.cpp" />
     <ClCompile Include="object\Player.cpp" />
     <ClCompile Include="window\FullWindow.cpp" />
     <ClCompile Include="window\Input.cpp" />
@@ -70,7 +71,9 @@
     <ClInclude Include="object\Camera.h" />
     <ClInclude Include="object\Enemy.h" />
     <ClInclude Include="object\GameObject.h" />
+    <ClInclude Include="object\Object.h" />
     <ClInclude Include="object\Player.h" />
+    <ClInclude Include="util.h" />
     <ClInclude Include="window\FullWindow.h" />
     <ClInclude Include="window\Input.h" />
     <ClInclude Include="window\ScaleWindow.h" />

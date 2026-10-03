@@ -1,4 +1,4 @@
-#include "CommandList.h"
+﻿#include "CommandList.h"
 #include<cassert>
 
 CommandList::~CommandList()
@@ -9,10 +9,10 @@ CommandList::~CommandList()
 	}
 }
 
-[[nodiscard]] bool CommandList::create(const Device & device, const CommandAllocator & commandAllocator) noexcept
+[[nodiscard]] bool CommandList::create(const CommandAllocator & commandAllocator) noexcept
 {
 	//コマンドリストの作成
-	const auto hr = device.get()->CreateCommandList(0, commandAllocator.getType(), commandAllocator.get(), nullptr, IID_PPV_ARGS(&commandList_));
+	const auto hr = Device::instance().get()->CreateCommandList(0, commandAllocator.getType(), commandAllocator.get(), nullptr, IID_PPV_ARGS(&commandList_));
 	if (FAILED(hr))
 	{
 		assert(false && "コマンドリストの作成に失敗\0");

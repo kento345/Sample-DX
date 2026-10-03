@@ -16,16 +16,16 @@ TrianglePolygon::~TrianglePolygon()
 	}
 }
 
-bool TrianglePolygon::create(const Device& device) noexcept
+bool TrianglePolygon::create() noexcept
 {
 	//頂点バッファの生成
-	if (!TempletePolygon::createVerttexBuffer(device,triangleData_.vertices))
+	if (!TempletePolygon::createVerttexBuffer(triangleData_.vertices))
 	{
 		assert(false && "頂点バッファの作成に失敗\0");
 		return false;
 	}
 	//インデックスバッファの生成
-	if (!TempletePolygon::createIndexBuffer(device,triangleData_.indices))
+	if (!TempletePolygon::createIndexBuffer(triangleData_.indices))
 	{
 		assert(false && "インデックスバッファの作成に失敗\0");
 		return false;

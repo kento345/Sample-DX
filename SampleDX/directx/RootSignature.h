@@ -1,6 +1,4 @@
-#pragma once
-
-#include"Device.h"
+﻿#pragma once
 
 class RootSignature final
 {
@@ -20,7 +18,7 @@ public:
 	/// </summary>
 	/// <param name="devicenoe"></param>
 	/// <returns></returns>
-	[[nodiscard]] bool create(const Device& devicenoe)noexcept;
+	[[nodiscard]] bool create()noexcept;
 
 	/// <summary>
 	/// ルートシグネチャを取得

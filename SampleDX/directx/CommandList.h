@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include"Device.h"
 #include"CommandAllocator.h"
 
@@ -21,7 +21,7 @@ public:
 	/// <param name="device"></param>
 	/// <param name="commandAllocator"></param>
 	/// <returns></returns>
-	[[nodiscard]] bool create(const Device& device, const CommandAllocator& commandAllocator)noexcept;
+	[[nodiscard]] bool create(const CommandAllocator& commandAllocator)noexcept;
 
 	/// <summary>
 	/// コマンドアロケータのリセット

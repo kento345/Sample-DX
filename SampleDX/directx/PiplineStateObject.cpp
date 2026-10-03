@@ -1,4 +1,4 @@
-#include "PiplineStateObject.h"
+﻿#include "PiplineStateObject.h"
 #include<cassert>
 
 PiplineStateObject::~PiplineStateObject()
@@ -9,7 +9,7 @@ PiplineStateObject::~PiplineStateObject()
 	}
 }
 
-bool PiplineStateObject::create(const Device& device, const Shader& shader, const RootSignature& rootSignature) noexcept
+bool PiplineStateObject::create(const Shader& shader, const RootSignature& rootSignature) noexcept
 {
 	//頂点レイアウト
 	//頂点バッファのフォーマットに合わせて設定する
@@ -70,7 +70,7 @@ bool PiplineStateObject::create(const Device& device, const Shader& shader, cons
 	psoDesc.NumRenderTargets = 1;
 	psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
 	psoDesc.SampleDesc.Count = 1;
-	auto res = device.get()->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&piplineState_));
+	auto res = Device::instance().get()->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&piplineState_));
 	if (FAILED(res)) {
 		assert(false && "パイプラインステートの作成に失敗\0");
 	}

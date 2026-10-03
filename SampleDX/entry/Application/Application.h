@@ -5,7 +5,6 @@
 #include"../../MoveProhibited/Nomove.h"
 #include"../../window/Window_Base.h"
 
-#include"../../directx/Device.h"
 #include"../../directx/DXGI.h"
 #include"../../directx/CommandAllocator.h"
 #include"../../directx/CommandList.h"
@@ -65,10 +64,8 @@ public:
 private:
 	std::unique_ptr<Window_Base> windowInstance_;    //ウィンドウインスタンス
 	DXGI dxgiInstance_{};							 //DXGIインスタンス
-	Device deviceInstance_{};						 //デバイスインスタンス
 	CommandQueue commandQueueInstance_{};			 //コマンドキューインスタンス
 	SwapChain swapChainInstance_{};					 //スワップチェインインスタンス
-	DescriptorHeap descriptorHeapInstance_{};		 //ディスクリプタヒープインスタンス
 	RenderTarget renderTargetInstance_{};			 //レンダーターゲットインスタンス
 	CommandAllocator commandAllocatorInstance_[2]{}; //コマンドアロケータインスタンス 
 	CommandList commandListInstance_{};              //コマンドリストインスタンス
@@ -80,7 +77,6 @@ private:
 	RootSignature      rootSignatureInstance_{};                 /// ルートシグネチャインスタンス
 	Shader             shaderInstance_{};                        /// シェーダーインスタンス
 	PiplineStateObject piplineStateObjectInstance_{};            /// パイプラインステートオブジェクトインスタンス
-	DescriptorHeap     constantBufferDescriptorHeapInstance_{};  /// コンスタントバッファ用ディスクリプタヒープインスタンス
 
 	//三角形ポリゴン
 	TrianglePolygon trianglePolygonInstance_{};                /// 三角形ポリゴンインスタンス

@@ -1,4 +1,4 @@
-#include "Fence.h"
+﻿#include "Fence.h"
 #include<cassert>
 
 Fence::~Fence()
@@ -9,10 +9,10 @@ Fence::~Fence()
 	}
 }
 
-[[nodiscard]] bool Fence::create(const Device & device) noexcept
+[[nodiscard]] bool Fence::create() noexcept
 {
 	//フェンスの作成
-	HRESULT hr = device.get()->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence_));
+	HRESULT hr = Device::instance().get()->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence_));
 	if (FAILED(hr))
 	{
 		assert(false && "フェンスの作成に失敗\0");

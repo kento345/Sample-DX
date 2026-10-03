@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include"Device.h"
 #include"RootSignature.h"
@@ -24,7 +24,7 @@ public:
 	/// <param name="shader"></param>
 	/// <param name="rootSignature"></param>
 	/// <returns></returns>
-	[[nodiscard]] bool create(const Device& device, const Shader& shader, const RootSignature& rootSignature)noexcept;
+	[[nodiscard]] bool create(const Shader& shader, const RootSignature& rootSignature)noexcept;
 
 	/// <summary>
 	/// パイプラインステートを取得

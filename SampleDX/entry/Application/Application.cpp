@@ -3,8 +3,11 @@
 
 #include "Application.h"
 
+#include"../../directx/Device.h"
+
 #include"../../window/FullWindow.h"
 #include"../../window/ScaleWindow.h"
+
 
 bool a = true;
 
@@ -43,13 +46,13 @@ bool Application::initialize(HINSTANCE hInstance)
 	}
 
 	//デバイスの生成
-	if (!deviceInstance_.create(dxgiInstance_)) {
+	if (!Device::instance().create(dxgiInstance_)) {
 		assert(false && "デバイスの作成に失敗しました");
 		return false;
 	}
 
 	//コマンドキューの生成
-	if (!commandQueueInstance_.create(deviceInstance_)) {
+	if (!commandQueueInstance_.create()) {
 		assert(false && "コマンドキューの作成に失敗しました");
 		return false;
 	}
@@ -61,43 +64,55 @@ bool Application::initialize(HINSTANCE hInstance)
 	}
 
 	//ディスクリプタヒープの生成
-	if (!descriptorHeapInstance_.create(deviceInstance_, D3D12_DESCRIPTOR_HEAP_TYPE_RTV, swapChainInstance_.getDesc().BufferCount)) {
+	if (!DescriptorHeapContainer::instance().create(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, swapChainInstance_.getDesc().BufferCount)) {
 		assert(false && "ディスクリプタヒープの作成に失敗しました");
 		return false;
 	}
 
+	//定数バッファ用ディスクリプタヒープの作成
+	if (!DescriptorHeapContainer::instance().create(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 64, true)) {
+		assert(false && "定数バッファ用ディスクリプタヒープの作成に失敗しました");
+		return false;
+	}
+
+	//デプスバッファ用ディスクリプタヒープの作成
+	if (!DescriptorHeapContainer::instance().create(D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1)) {
+		assert(false && "デプスバッファ用ディスクリプタヒープの作成に失敗しました");
+		return false;
+	}
+
 	//レンダーターゲットの生成
-	if (!renderTargetInstance_.createBackBuffer(deviceInstance_, swapChainInstance_, descriptorHeapInstance_)) {
+	if (!renderTargetInstance_.createBackBuffer(swapChainInstance_)) {
 		assert(false && "レンダーターゲットの作成に失敗しました");
 		return false;
 	}
 
 	//コマンドアロケータの生成
-	if (!commandAllocatorInstance_[0].create(deviceInstance_, D3D12_COMMAND_LIST_TYPE_DIRECT)) {
+	if (!commandAllocatorInstance_[0].create(D3D12_COMMAND_LIST_TYPE_DIRECT)) {
 		assert(false && "コマンドアロケータの作成に失敗しました");
 		return false;
 	}
 
-	if (!commandAllocatorInstance_[1].create(deviceInstance_, D3D12_COMMAND_LIST_TYPE_DIRECT)) {
+	if (!commandAllocatorInstance_[1].create(D3D12_COMMAND_LIST_TYPE_DIRECT)) {
 		assert(false && "コマンドアロケータの作成に失敗しました");
 		return false;
 	}
 
 	//コマンドリストの生成
-	if (!commandListInstance_.create(deviceInstance_, commandAllocatorInstance_[0])) {
+	if (!commandListInstance_.create(commandAllocatorInstance_[0])) {
 		assert(false && "コマンドリストの作成に失敗しました");
 		return false;
 	}
 
 	//フェンスの生成
-	if (!fenceInstance_.create(deviceInstance_)) {
+	if (!fenceInstance_.create()) {
 		assert(false && "フェンスの作成に失敗しました");
 		return false;
 	}
 
 
 	//三角形ポリゴンの生成
-	if (!trianglePolygonInstance_.create(deviceInstance_)) {
+	if (!trianglePolygonInstance_.create()) {
 		assert(false && "三角形ポリゴンの作成に失敗しました");
 		return false;
 	}
@@ -105,37 +120,30 @@ bool Application::initialize(HINSTANCE hInstance)
 	triangleObjectInstance_.initialize({0.f,0.f,0.f}, {0.1f,0.1f,0.1f,1.0f});
 
 	//四角形ポリゴン生成
-	if (!quadPolygonInstance_.create(deviceInstance_)){
+	if (!quadPolygonInstance_.create()){
 		assert(false && "四角形ポリゴンの作成に失敗しました");
 		return false;
 	}
 	quadObjectInstance_.initialize({ 2.f,0.f,1.f }, { 1.f,0.f,0.f,1.f });
 
 	//ルートシグネチャの生成
-	if (!rootSignatureInstance_.create(deviceInstance_)) {
+	if (!rootSignatureInstance_.create()) {
 		assert(false && "ルートシグネチャの作成に失敗しました");
 		return false;
 	}
 	//シェーダの生成
-	if (!shaderInstance_.create(deviceInstance_)) {
+	if (!shaderInstance_.create()) {
 		assert(false && "シェーダーの作成に失敗しました");
 		return false;
 	}
 	//パイプラインステートオブジェクトの生成
-	if (!piplineStateObjectInstance_.create(deviceInstance_, shaderInstance_, rootSignatureInstance_)) {
+	if (!piplineStateObjectInstance_.create(shaderInstance_, rootSignatureInstance_)) {
 		assert(false && "パイプラインステートオブジェクトの作成に失敗しました");
 		return false;
 	}
 
 	//カメラの生成
 	cameraInstance_.initialize();
-
-	//定数バッファ用ディスクリプタヒープの生成
-	//定数バッファ用はCBV_SRV_UAV タイプで2つ分確保
-	if (!constantBufferDescriptorHeapInstance_.create(deviceInstance_, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 3, true)) {
-		assert(false && "定数バッファ用ディスクリプタヒープのの作成に失敗しました");
-		return false;
-	}
 
 	//カメラ用コンスタントバッファの作成
 	//カメラ用はディスクリプタヒープの先頭に作成
@@ -200,6 +208,9 @@ void Application::loop() noexcept
 			fenceInstance_.wait(frameFenceValue_[backBufferIndex]);
 		}
 
+		//ディスクリプタヒープの解放予約分を解放
+		DescriptorHeapContainer::instance().applyPendingFree();
+
 		// コマンドアロケータリセット
 		commandAllocatorInstance_[backBufferIndex].reset();
 		// コマンドリストリセット
@@ -210,7 +221,7 @@ void Application::loop() noexcept
 		commandListInstance_.get()->ResourceBarrier(1, &pToRT);
 
 		//レンダーターゲットの設定
-		D3D12_CPU_DESCRIPTOR_HANDLE handles[] = { renderTargetInstance_.getDescriptorHandle(deviceInstance_,descriptorHeapInstance_,backBufferIndex) };
+		D3D12_CPU_DESCRIPTOR_HANDLE handles[] = { renderTargetInstance_.getDescriptorHandle(backBufferIndex) };
 		commandListInstance_.get()->OMSetRenderTargets(1, handles, false, nullptr);
 
 		//レンダーターゲットのクリア

@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include"../directx/Device.h"
 #include"../directx/CommandList.h"
 
 #include"TempletePolygon.h"
@@ -43,7 +42,7 @@ public:
 	/// </summary>
 	/// <param name="device"></param>
 	/// <returns></returns>
-	[[nodiscard]] bool create(const Device& device)noexcept;
+	[[nodiscard]] bool create()noexcept;
 
 	/// <summary>
 	/// ポリゴン描画

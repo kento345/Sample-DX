@@ -16,16 +16,16 @@ QuadPolygon::~QuadPolygon()
 	}
 }
 
-bool QuadPolygon::create(const Device& device) noexcept
+bool QuadPolygon::create() noexcept
 {
 	//頂点バッファの生成
-	if (!TempletePolygon::createVerttexBuffer(device, quadData.vertices))
+	if (!TempletePolygon::createVerttexBuffer(quadData.vertices))
 	{
 		assert(false && "頂点バッファの作成に失敗\0");
 		return false;
 	}
 	//インデックスバッファの生成
-	if (!TempletePolygon::createIndexBuffer(device, quadData.indices))
+	if (!TempletePolygon::createIndexBuffer(quadData.indices))
 	{
 		assert(false && "インデックスバッファの作成に失敗\0");
 		return false;

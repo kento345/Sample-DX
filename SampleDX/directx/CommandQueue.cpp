@@ -1,4 +1,4 @@
-#include "CommandQueue.h"
+﻿#include "CommandQueue.h"
 #include<cassert>
 
 CommandQueue::~CommandQueue()
@@ -9,7 +9,7 @@ CommandQueue::~CommandQueue()
 	}
 }
 
-[[nodiscard]] bool CommandQueue::create(const Device& device) noexcept
+[[nodiscard]] bool CommandQueue::create() noexcept
 {
 	//コマンドキューの設定
 	D3D12_COMMAND_QUEUE_DESC desc{};
@@ -19,7 +19,7 @@ CommandQueue::~CommandQueue()
 	desc.NodeMask = 0; //
 
 	//コマンドキューの作成
-	const auto hr = device.get()->CreateCommandQueue(&desc, IID_PPV_ARGS(&commandQueue_));
+	const auto hr = Device::instance().get()->CreateCommandQueue(&desc, IID_PPV_ARGS(&commandQueue_));
 	if (FAILED(hr)) {
 		assert(false && "コマンドキューの作成に失敗\0");
 		return false;

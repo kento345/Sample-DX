@@ -1,4 +1,6 @@
-#include "RootSignature.h"
+﻿#include "RootSignature.h"
+
+#include"Device.h"
 #include<cassert>
 
 RootSignature::~RootSignature()
@@ -10,7 +12,7 @@ RootSignature::~RootSignature()
 	}
 }
 
-bool RootSignature::create(const Device& device) noexcept
+bool RootSignature::create() noexcept
 {
 	//描画に必要なリソースをシェーダに伝える
 	
@@ -67,7 +69,7 @@ bool RootSignature::create(const Device& device) noexcept
 	else
 	{
 		//ルートシグネチャの生成
-		res = device.get()->CreateRootSignature(
+		res = Device::instance().get()->CreateRootSignature(
 			0,
 			signature->GetBufferPointer(),
 			signature->GetBufferSize(),

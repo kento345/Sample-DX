@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include"Device.h"
 
 class Shader final
@@ -19,7 +19,7 @@ public:
 	/// </summary>
 	/// <param name="device"></param>
 	/// <returns></returns>
-	[[nodiscard]] bool create(const Device& device)noexcept;
+	[[nodiscard]] bool create()noexcept;
 
 	/// <summary>
 	/// 頂点シェーダを取得

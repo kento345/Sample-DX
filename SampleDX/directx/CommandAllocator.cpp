@@ -1,4 +1,4 @@
-#include "CommandAllocator.h"
+﻿#include "CommandAllocator.h"
 #include<cassert>
 
 
@@ -10,13 +10,13 @@ CommandAllocator::~CommandAllocator()
 	}
 }
 
-bool CommandAllocator::create(const Device & device, const D3D12_COMMAND_LIST_TYPE type) noexcept
+bool CommandAllocator::create(const D3D12_COMMAND_LIST_TYPE type) noexcept
 {
 	//コマンドリストのタイプを設定
 	type_ = type;
 
 	//コマンドアロケータ
-	const auto hr = device.get()->CreateCommandAllocator(type_, IID_PPV_ARGS(&commandAllocator_));
+	const auto hr = Device::instance().get()->CreateCommandAllocator(type_, IID_PPV_ARGS(&commandAllocator_));
 	if (FAILED(hr))
 	{
 		assert(false && "コマンドアロケータの作成に失敗\0");

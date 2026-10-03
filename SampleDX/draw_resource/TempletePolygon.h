@@ -27,7 +27,7 @@ protected:
 	/// </summary>
 	/// <param name="device"></param>
 	/// <returns></returns>
-	[[nodiscard]] virtual bool createVerttexBuffer(const Device& device,const std::vector<T>& Vertices)noexcept {
+	[[nodiscard]] virtual bool createVerttexBuffer(const std::vector<T>& Vertices)noexcept {
 		//三角形の頂点データ
 
 		//頂点データサイズ
@@ -57,7 +57,7 @@ protected:
 		resourceDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
 
 		//頂点バッファの生成
-		auto res = device.get()->CreateCommittedResource(
+		auto res = Device::instance().get()->CreateCommittedResource(
 			&heapProperty,
 			D3D12_HEAP_FLAG_NONE,
 			&resourceDesc,
@@ -101,7 +101,7 @@ protected:
 	/// </summary>
 	/// <param name="device"></param>
 	/// <returns></returns>
-	[[nodiscard]] virtual bool createIndexBuffer(const Device& device,const std::vector<uint16_t>& Indeces) noexcept
+	[[nodiscard]] virtual bool createIndexBuffer(const std::vector<uint16_t>& Indeces) noexcept
 	{
 		//三角形の頂点データ
 
@@ -133,7 +133,7 @@ protected:
 		resourceDesc.Flags = D3D12_RESOURCE_FLAG_NONE;
 
 		//頂点バッファの生成
-		auto res = device.get()->CreateCommittedResource(
+		auto res = Device::instance().get()->CreateCommittedResource(
 			&heapProperty,
 			D3D12_HEAP_FLAG_NONE,
 			&resourceDesc,

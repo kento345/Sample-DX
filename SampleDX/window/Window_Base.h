@@ -1,18 +1,17 @@
-#pragma once
+﻿#pragma once
 #include <Windows.h>
 #include <string>
 
-class Window_Base
+#include "../MoveProhibited/Nomove.h"
+
+class Window_Base : public Nomove 
 {
 public:
-	/// <summary>
-	/// コンストラクタ
-	/// </summary>
-	Window_Base() = default;
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
-	~Window_Base() = default;
+
+	static Window_Base& instance() noexcept {
+		static Window_Base instance;
+		return instance;
+	}
 
 	/// <summary>
 	/// メッセージループ
@@ -29,6 +28,16 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	virtual std::pair<int, int> size() const noexcept = 0;
+
+private:
+	/// <summary>
+    /// コンストラクタ
+    /// </summary>
+	Window_Base() = default;
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	~Window_Base() = default;
 
 protected:
 	HWND handle_{}; // ウィンドウハンドル

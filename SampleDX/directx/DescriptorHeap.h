@@ -1,20 +1,25 @@
-#pragma once
+﻿#pragma once
 
-#include"Device.h"
+#include"../MoveProhibited/Nomove.h"
+
+#include<d3d12.h>
+#include<unordered_map>
+#include<optional>
+#include<memory>
+
+class DescriptorHeap; //前方宣言
 
 
-class DescriptorHeap final
-{
+class DescriptorHeapContainer : public Nomove{
 public:
 	/// <summary>
-	/// コンストラクタ
+	/// インスタンス取得
 	/// </summary>
-	DescriptorHeap() = default;
-
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
-	~DescriptorHeap();
+	/// <returns></returns>
+	static DescriptorHeapContainer& instance() noexcept {
+		static DescriptorHeapContainer instance;
+		return instance;
+	}
 
 	/// <summary>
 	/// ディスクリプタヒープを生成
@@ -24,22 +29,46 @@ public:
 	/// <param name="numDescriptors"></param>
 	/// <param name="shaferVisible"></param>
 	/// <returns></returns>
-	[[nodiscard]] bool create(const Device& device, D3D12_DESCRIPTOR_HEAP_TYPE type, UINT numDescriptors, bool shaferVisible = false)noexcept;
+	[[nodiscard]] bool create(D3D12_DESCRIPTOR_HEAP_TYPE type, UINT numDescriptors, bool shaferVisible = false)noexcept;
+
+	/// <summary>
+	/// 解放予約されているディスクリプターを解放する
+	/// </summary>
+	void applyPendingFree() noexcept;;
 
 	/// <summary>
 	/// ディスクリプタヒープを取得
 	/// </summary>
 	/// <returns></returns>
-	[[nodiscard]] ID3D12DescriptorHeap* get()const noexcept;
+	[[nodiscard]] ID3D12DescriptorHeap* get(D3D12_DESCRIPTOR_HEAP_TYPE type)const noexcept;
 
 	/// <summary>
-	/// ディスクリプタヒープのタイプを取得
+	/// ディスクリプタを確保
 	/// </summary>
+	/// <param name="type"></param>
 	/// <returns></returns>
-	[[nodiscard]] D3D12_DESCRIPTOR_HEAP_TYPE getType()const noexcept;
+	[[nodiscard]] std::optional<UINT> allocateDescriptor(D3D12_DESCRIPTOR_HEAP_TYPE type) noexcept;
+
+	/// <summary>
+	/// 解放予定のディスクリプタを登録
+	/// </summary>
+	/// <param name="type"></param>
+	/// <param name="descriptorIndex"></param>
+	void releaseDescriptor(D3D12_DESCRIPTOR_HEAP_TYPE type, UINT descriptorIndex)noexcept;
 
 private:
-	ID3D12DescriptorHeap* heap_{};	   //ディスクリプタヒープ
-	D3D12_DESCRIPTOR_HEAP_TYPE type_{}; //ヒープのタイプ
+
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	DescriptorHeapContainer();
+	
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	~DescriptorHeapContainer();
+
+private:
+	std::unordered_map<UINT, std::unique_ptr<DescriptorHeap>> map_; //種類毎のデスクリプタマップ
 };
 

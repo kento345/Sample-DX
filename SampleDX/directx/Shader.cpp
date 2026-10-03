@@ -1,4 +1,4 @@
-#include "Shader.h"
+﻿#include "Shader.h"
 #include<cassert>
 #include<string>
 
@@ -19,7 +19,7 @@ Shader::~Shader()
 	}
 }
 
-bool Shader::create(const Device& device) noexcept
+bool Shader::create() noexcept
 {
 	//シェーダを読込,コンパイルして生成
 	const std::string filePath = "asset/shader.hlsl";
