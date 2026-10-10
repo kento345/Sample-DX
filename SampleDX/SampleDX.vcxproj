@@ -34,7 +34,7 @@
     <ClCompile Include="directx\Shader.cpp" />
     <ClCompile Include="directx\SwapChain.cpp" />
     <ClCompile Include="draw_resource\QuadPolygon.cpp" />
-    <ClCompile Include="draw_resource\TempletePolygon.cpp" />
+    <ClCompile Include="draw_resource\ShapeContainer.cpp" />
     <ClCompile Include="draw_resource\TrianglePolygon.cpp" />
     <ClCompile Include="entry\Application\Application.cpp" />
     <ClCompile Include="entry\entry.cpp" />
@@ -63,7 +63,9 @@
     <ClInclude Include="directx\RootSignature.h" />
     <ClInclude Include="directx\Shader.h" />
     <ClInclude Include="directx\SwapChain.h" />
+    <ClInclude Include="draw_resource\PolygonBase.h" />
     <ClInclude Include="draw_resource\QuadPolygon.h" />
+    <ClInclude Include="draw_resource\ShapeContainer.h" />
     <ClInclude Include="draw_resource\TempletePolygon.h" />
     <ClInclude Include="draw_resource\TrianglePolygon.h" />
     <ClInclude Include="entry\Application\Application.h" />

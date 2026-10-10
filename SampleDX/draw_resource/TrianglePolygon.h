@@ -7,14 +7,14 @@
 #include<DirectXMath.h>
 
 namespace {
-	struct Vertex
+	struct TVertex
 	{
 		DirectX::XMFLOAT3 position;
 		DirectX::XMFLOAT4 color;
 	};
 }
 
-class TrianglePolygon : public TempletePolygon<Vertex>
+class TrianglePolygon : public TempletePolygon<TVertex>
 {
 public:
 	/// <summary>
@@ -35,20 +35,20 @@ public:
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~TrianglePolygon();
+	~TrianglePolygon() override;
 
 	/// <summary>
 	/// ポリゴン生成
 	/// </summary>
 	/// <param name="device"></param>
 	/// <returns></returns>
-	[[nodiscard]] bool create()noexcept;
+	[[nodiscard]] bool create()noexcept override;
 
 	/// <summary>
 	/// ポリゴン描画
 	/// </summary>
 	/// <param name="commandList"></param>
-	[[nodiscard]] void draw(const CommandList& commandList)noexcept;
+	[[nodiscard]] void draw(const CommandList& commandList)noexcept override;
 
 private:
 	PolygonData triangleData_{

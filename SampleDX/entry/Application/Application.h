@@ -89,7 +89,6 @@ private:
 	ConstantBuffer quadPolygonConstanBufferInstance_{}; //四角形ポリゴン用コンスタントバッファインスタンス
 
 	//カメラ
-	Camera         cameraInstance_{};                /// カメラインスタンス
-	ConstantBuffer cameraConstantBufferInstance_{};  /// カメラ用コンスタントバッファインスタンス
+	std::unique_ptr<game::Camera> camera_{};
 };
 	

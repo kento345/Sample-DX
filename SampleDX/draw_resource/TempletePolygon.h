@@ -2,17 +2,18 @@
 
 #include"../directx/Device.h"
 #include"../directx/CommandList.h"
+#include"PolygonBase.h"
 #include<DirectXMath.h>
 #include<vector>
 
 template <class T>
-class TempletePolygon
+class TempletePolygon : public PolygonBase
 {
 public:
 	
 	TempletePolygon() = default;
 
-	virtual ~TempletePolygon() = default;
+	virtual ~TempletePolygon() override = default;
 
 protected:
 

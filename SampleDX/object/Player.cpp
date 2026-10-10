@@ -1,23 +1,36 @@
-#include "Player.h"
+﻿#include "Player.h"
 #include"../window/Input.h"
+#include"../draw_resource/ShapeContainer.h"
+#include"../draw_resource/QuadPolygon.h"
 
 
+namespace game {
 
-void Player::update() noexcept
-{
-	const float pos = 0.05f;
-	if (Input::instance().getKey('W')) {
-		position_.z += pos ;
+	void Player::initialize()noexcept {
+		GameObject::initialize();
+
+		auto quadId = ShapeContainer::instance().create<QuadPolygon>();
+
 	}
-	if (Input::instance().getKey('S')) {
-		position_.z -= pos;
+
+	void Player::update() noexcept
+	{
+		const float pos = 0.05f;
+		if (Input::instance().getKey('W')) {
+			position_.z += pos;
+		}
+		if (Input::instance().getKey('S')) {
+			position_.z -= pos;
+		}
+		if (Input::instance().getKey('A')) {
+			position_.x -= pos;
+		}
+		if (Input::instance().getKey('D')) {
+			position_.x += pos;
+		}
+		world_ = DirectX::XMMatrixTranslation(position_.x, position_.y, position_.z);
+		color_ = DirectX::XMFLOAT4(0.1f, 1.0f, 1.0f, 1.0f);
 	}
-	if (Input::instance().getKey('A')) {
-		position_.x -= pos;
-	}
-	if (Input::instance().getKey('D')) {
-		position_.x += pos;
-	}
-	world_ = DirectX::XMMatrixTranslation(position_.x,position_.y,position_.z);
-	color_ = DirectX::XMFLOAT4(0.1f, 1.0f, 1.0f, 1.0f);
 }
+
+

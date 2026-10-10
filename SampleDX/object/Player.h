@@ -1,16 +1,21 @@
-#pragma once
+﻿#pragma once
 #include"GameObject.h"
 
+namespace game {
+	class Player : public GameObject
+	{
+	public:
 
-class Player : public GameObject
-{
-public:
-	
-	Player() = default;
-	
-	~Player() = default;
+		Player() = default;
 
-	 void update() noexcept override;
+		virtual ~Player() = default;
 
-};
+		virtual void initialize()noexcept override;
+
+		virtual void update() noexcept override;
+
+	};
+}
+
+
 

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include"Device.h"
 #include"DescriptorHeap.h"
@@ -26,7 +26,7 @@ public:
 	/// <param name="bufferSize"></param>
 	/// <param name="descriptorIndex"></param>
 	/// <returns></returns>
-	[[nodiscard]] bool create(const Device& device, const DescriptorHeap& heap, UINT bufferSize, UINT descriptorIndex) noexcept;
+	[[nodiscard]] bool create(UINT bufferSize) noexcept;
 
 	/// <summary>
 	/// コンスタントバッファの取得
@@ -41,7 +41,8 @@ public:
 	[[nodiscard]] D3D12_GPU_DESCRIPTOR_HANDLE getGpuDescriptorHandle() const noexcept;
 
 private:
-	ID3D12Resource* constantBuffer_{};  /// コンスタントバッファ
-	D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle_{};       /// GPU 用ディスクリプタハンドル
+	Microsoft::WRL::ComPtr<ID3D12Resource> constantBuffer_{};  // コンスタントバッファ
+	UINT descriptorIndex_{};                        //ディスクリプタインデックス
+	D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle_{};       // GPU 用ディスクリプタハンドル
 };
 

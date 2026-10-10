@@ -105,9 +105,6 @@
     <ClCompile Include="window\Input.cpp">
       <Filter>window</Filter>
     </ClCompile>
-    <ClCompile Include="draw_resource\TempletePolygon.cpp">
-      <Filter>draw_resorce</Filter>
-    </ClCompile>
     <ClCompile Include="draw_resource\QuadPolygon.cpp">
       <Filter>draw_resorce</Filter>
     </ClCompile>
@@ -122,6 +119,9 @@
     </ClCompile>
     <ClCompile Include="object\Object.cpp">
       <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="draw_resource\ShapeContainer.cpp">
+      <Filter>draw_resorce</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -206,11 +206,17 @@
     <ClInclude Include="directx\DepthBuffer.h">
       <Filter>directx</Filter>
     </ClInclude>
+    <ClInclude Include="util.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
     <ClInclude Include="object\Object.h">
       <Filter>object</Filter>
     </ClInclude>
-    <ClInclude Include="util.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="draw_resource\ShapeContainer.h">
+      <Filter>draw_resorce</Filter>
+    </ClInclude>
+    <ClInclude Include="draw_resource\PolygonBase.h">
+      <Filter>draw_resorce</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

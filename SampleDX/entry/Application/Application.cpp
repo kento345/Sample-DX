@@ -8,6 +8,10 @@
 #include"../../window/FullWindow.h"
 #include"../../window/ScaleWindow.h"
 
+namespace {
+	constexpr UINT sceneShaderSlot_ = 0; //シーン共通シェーダースロット
+}
+
 
 bool a = true;
 
@@ -141,29 +145,14 @@ bool Application::initialize(HINSTANCE hInstance)
 		assert(false && "パイプラインステートオブジェクトの作成に失敗しました");
 		return false;
 	}
-
+	
 	//カメラの生成
-	cameraInstance_.initialize();
+	camera_ = std::make_unique<game::Camera>();
+	camera_->initialize();
 
-	//カメラ用コンスタントバッファの作成
-	//カメラ用はディスクリプタヒープの先頭に作成
-	if (!cameraConstantBufferInstance_.create(deviceInstance_, constantBufferDescriptorHeapInstance_, sizeof(Camera::ConstBufferData), 0)) {
-		assert(false && "カメラ用コンスタントバッファの作成に失敗しました");
-		return false;
-	}
-
-	//三角形ポリゴン用コンスタントバッファの作成
-	//三角形ポリゴン用はディスクリプタヒープの2番目に作成
-	if (!trianglePolygonConstantBufferInstance_.create(deviceInstance_, constantBufferDescriptorHeapInstance_, sizeof(TrianglePolygon::ConstBufferData), 1)) {
-		assert(false && "三角形ポリゴン用コンスタントバッファの作成に失敗しました");
-		return false;
-	}
-
-	//四角形ポリゴン用コンスタントバッファの作成
-	if (!quadPolygonConstanBufferInstance_.create(deviceInstance_, constantBufferDescriptorHeapInstance_, sizeof(QuadPolygon::ConstBufferData), 2)) {
-		assert(false && "四角形ポリゴン用コンスタントバッファの作成に失敗しました");
-		return false;
-	}
+	//三角形ポリゴン
+	
+	//四角形ポリゴン
 
 
     return true;
@@ -193,7 +182,7 @@ void Application::loop() noexcept
 	while (windowInstance_->messageLoop())
 	{
 		//カメラの更新
-		cameraInstance_.update();
+		camera_->update();
 		//三角形オブジェクトの更新
 		triangleObjectInstance_.update();
 		//四角形オブジェクトの更新
@@ -254,25 +243,17 @@ void Application::loop() noexcept
 		commandListInstance_.get()->RSSetScissorRects(1, &scissorRect);
 
 		//コンスタントバッファ用ディスクリプタヒープの設定
-		ID3D12DescriptorHeap* p[] = { constantBufferDescriptorHeapInstance_.get() };
+		ID3D12DescriptorHeap* p[] = { DescriptorHeapContainer::instance().get(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)};
 		commandListInstance_.get()->SetDescriptorHeaps(1, p);
 
 		{
 			// カメラのコンスタントバッファへデータ転送
-			Camera::ConstBufferData cameraData{
-				DirectX::XMMatrixTranspose(cameraInstance_.viewMatrix()),
-				DirectX::XMMatrixTranspose(cameraInstance_.projection()),
-			};
-			UINT8* pCameraData{};
-			cameraConstantBufferInstance_.constantBuffer()->Map(0, nullptr, reinterpret_cast<void**>(&pCameraData));
-			memcpy_s(pCameraData, sizeof(cameraData), &cameraData, sizeof(cameraData));
-			cameraConstantBufferInstance_.constantBuffer()->Unmap(0, nullptr);
-			commandListInstance_.get()->SetGraphicsRootDescriptorTable(0, cameraConstantBufferInstance_.getGpuDescriptorHandle());
-
+			camera_->updateDrawBuffer();
+			camera_->setDrawCommand(commandListInstance_, sceneShaderSlot_);
 		}
 	
 		{
-			// 三角形ポリゴンのコンスタントバッファへデータ転送
+/*			// 三角形ポリゴンのコンスタントバッファへデータ転送
 			TrianglePolygon::ConstBufferData triangleData{
 				DirectX::XMMatrixTranspose(triangleObjectInstance_.world()),
 				triangleObjectInstance_.color() };
@@ -282,11 +263,11 @@ void Application::loop() noexcept
 			trianglePolygonConstantBufferInstance_.constantBuffer()->Unmap(0, nullptr);
 			commandListInstance_.get()->SetGraphicsRootDescriptorTable(1, trianglePolygonConstantBufferInstance_.getGpuDescriptorHandle());
 			// ポリゴンの描画
-			trianglePolygonInstance_.draw(commandListInstance_);
+			trianglePolygonInstance_.draw(commandListInstance_);*/
 		}
 
 		{
-			QuadPolygon::ConstBufferData quadData{
+/*			QuadPolygon::ConstBufferData quadData{
 				DirectX::XMMatrixTranspose(quadObjectInstance_.world()),
 				quadObjectInstance_.color() };
 			UINT8* pQuadData{};
@@ -295,7 +276,7 @@ void Application::loop() noexcept
 			quadPolygonConstanBufferInstance_.constantBuffer()->Unmap(0, nullptr);
 			commandListInstance_.get()->SetGraphicsRootDescriptorTable(1, quadPolygonConstanBufferInstance_.getGpuDescriptorHandle());
 
-			quadPolygonInstance_.draw(commandListInstance_);
+			quadPolygonInstance_.draw(commandListInstance_);*/
 		}
 		//-------------------------------------------------
 

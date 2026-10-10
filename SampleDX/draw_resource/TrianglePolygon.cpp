@@ -19,13 +19,13 @@ TrianglePolygon::~TrianglePolygon()
 bool TrianglePolygon::create() noexcept
 {
 	//頂点バッファの生成
-	if (!TempletePolygon::createVerttexBuffer(triangleData_.vertices))
+	if (!TempletePolygon<TVertex>::createVerttexBuffer(triangleData_.vertices))
 	{
 		assert(false && "頂点バッファの作成に失敗\0");
 		return false;
 	}
 	//インデックスバッファの生成
-	if (!TempletePolygon::createIndexBuffer(triangleData_.indices))
+	if (!TempletePolygon<TVertex>::createIndexBuffer(triangleData_.indices))
 	{
 		assert(false && "インデックスバッファの作成に失敗\0");
 		return false;

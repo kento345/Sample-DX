@@ -7,12 +7,16 @@
 class Window_Base : public Nomove 
 {
 public:
+	/// <summary>
+    /// コンストラクタ
+    /// </summary>
+	Window_Base() = default;
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	~Window_Base() = default;
 
-	static Window_Base& instance() noexcept {
-		static Window_Base instance;
-		return instance;
-	}
-
+public:
 	/// <summary>
 	/// メッセージループ
 	/// </summary>
@@ -22,22 +26,13 @@ public:
 	/// ハンドル取得
 	/// </summary>
 	/// <returns></returns>
-	virtual HWND handle() const noexcept = 0;
+	virtual HWND handle() const noexcept;
 	/// <summary>
 	/// サイズ取得
 	/// </summary>
 	/// <returns></returns>
-	virtual std::pair<int, int> size() const noexcept = 0;
+	virtual std::pair<int, int> size() const noexcept;
 
-private:
-	/// <summary>
-    /// コンストラクタ
-    /// </summary>
-	Window_Base() = default;
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
-	~Window_Base() = default;
 
 protected:
 	HWND handle_{}; // ウィンドウハンドル

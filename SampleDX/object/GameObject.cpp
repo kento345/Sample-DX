@@ -1,26 +1,48 @@
 ﻿#include "GameObject.h"
+#include"../draw_resource/ShapeContainer.h"
 #include<cmath>
 
-void GameObject::initialize(DirectX::XMFLOAT3 pos, DirectX::XMFLOAT4 color) noexcept
-{
-	//ワールド行列の設定
-	world_ = DirectX::XMMatrixTranslation(pos.x, pos.y, pos.z);
-	position_ = pos;
-
-	color_ = color;
+namespace {
+	struct ConstBufferData
+	{
+		DirectX::XMMATRIX world_{}; //ワールド行列
+		DirectX::XMFLOAT4 color_{};	//カラー(RGBA)
+	};
 }
 
-void GameObject::update() noexcept
-{
-    
-}
 
-DirectX::XMMATRIX GameObject::world() const noexcept
-{
-	return world_;
-}
+namespace game {
 
-DirectX::XMFLOAT4 GameObject::color() const noexcept
-{
-	return color_;
+	void GameObject::initialize() noexcept
+	{
+		createDrawBuffer();
+	}
+
+    void GameObject::setDrawCommand(const CommandList& commandList, UINT slot)noexcept{
+		Object::setDrawCommand(commandList, slot);
+		ShapeContainer::instance().draw(commandList, shaderId_);
+	}
+
+	void GameObject::createDrawBuffer() noexcept
+	{
+		if (!constantBuffer_.create(sizeof(ConstBufferData))) {
+			assert(false && "GameObject　コンスタントバッファの作成に失敗");
+		}
+	}
+
+	void GameObject::updateDrawBuffer() noexcept
+	{
+		Object::updateConstantBuffer(ConstBufferData{ DirectX::XMMatrixTranspose(world_),color_ });
+	}
+
+	DirectX::XMMATRIX GameObject::world() const noexcept
+	{
+		return world_;
+	}
+
+	DirectX::XMFLOAT4 GameObject::color() const noexcept
+	{
+		return color_;
+	}
+
 }

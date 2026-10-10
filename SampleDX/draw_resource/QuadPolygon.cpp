@@ -16,16 +16,16 @@ QuadPolygon::~QuadPolygon()
 	}
 }
 
-bool QuadPolygon::create() noexcept
+bool QuadPolygon::create() noexcept 
 {
 	//頂点バッファの生成
-	if (!TempletePolygon::createVerttexBuffer(quadData.vertices))
+	if (!TempletePolygon<QVertex>::createVerttexBuffer(quadData.vertices))
 	{
 		assert(false && "頂点バッファの作成に失敗\0");
 		return false;
 	}
 	//インデックスバッファの生成
-	if (!TempletePolygon::createIndexBuffer(quadData.indices))
+	if (!TempletePolygon<QVertex>::createIndexBuffer(quadData.indices))
 	{
 		assert(false && "インデックスバッファの作成に失敗\0");
 		return false;
@@ -33,7 +33,7 @@ bool QuadPolygon::create() noexcept
 	return true;
 }
 
-void QuadPolygon::draw(const CommandList& commandList) noexcept
+void QuadPolygon::draw(const CommandList& commandList) noexcept 
 {
 	//頂点バッファの設定
 	commandList.get()->IASetVertexBuffers(0, 1, &vertexBufferView_);

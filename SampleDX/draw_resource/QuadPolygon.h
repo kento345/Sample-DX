@@ -4,14 +4,14 @@
 #include<DirectXMath.h>
 
 namespace {
-	struct Vector
+	struct QVertex
 	{
 		DirectX::XMFLOAT3 position{};
 		DirectX::XMFLOAT4 color{};
 	};
 }
 
-class QuadPolygon : public TempletePolygon<Vector>
+class QuadPolygon : public TempletePolygon<QVertex>
 {
 public:
 	/// <summary>
@@ -31,20 +31,20 @@ public:
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~QuadPolygon();
+	~QuadPolygon() override;
 
 	/// <summary>
 	/// ポリゴン生成
 	/// </summary>
 	/// <param name="device"></param>
 	/// <returns></returns>
-	[[nodiscard]] bool create()noexcept;
+	[[nodiscard]] bool create()noexcept override;
 
 	/// <summary>
 	/// ポリゴン描画
 	/// </summary>
 	/// <param name="commandList"></param>
-	[[nodiscard]] void draw(const CommandList& commandList)noexcept;
+	[[nodiscard]] void draw(const CommandList& commandList)noexcept override;
 
 private:
 	PolygonData quadData{
