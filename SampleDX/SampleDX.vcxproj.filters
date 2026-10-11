@@ -123,6 +123,9 @@
     <ClCompile Include="draw_resource\ShapeContainer.cpp">
       <Filter>draw_resorce</Filter>
     </ClCompile>
+    <ClCompile Include="object\GameObjectManager.cpp">
+      <Filter>object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="entry\Application\Application.h">
@@ -217,6 +220,9 @@
     </ClInclude>
     <ClInclude Include="draw_resource\PolygonBase.h">
       <Filter>draw_resorce</Filter>
+    </ClInclude>
+    <ClInclude Include="object\GameObjectManager.h">
+      <Filter>object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

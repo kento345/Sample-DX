@@ -68,7 +68,7 @@ namespace game {
 	protected:
 		DirectX::XMMATRIX world_ = DirectX::XMMatrixIdentity();				  //ワールド行列
 		DirectX::XMFLOAT4 color_ = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f); //カラー(RGBA)
-		UINT64 shaderId_{};
+		UINT64 shapeId_{};
 		UINT64 handle_{};
 		UINT64 parent_{};
 		float  radius_{};
