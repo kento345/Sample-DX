@@ -50,7 +50,7 @@ namespace game {
 
 	private:
 
-		void registerCreation(std::function<std::unique_ptr<GameObject>()> creation, const UINT64 handle)noexcept;
+		void registerCreation(std::function<std::unique_ptr<GameObject>()> create, const UINT64 handle)noexcept;
 
 		void registerWaitDelete()noexcept;
 
@@ -58,7 +58,7 @@ namespace game {
 
 		GameObjectManager() = default;
 		
-		~GameObjectManager() = default;
+		~GameObjectManager();
 
 	private:
 		UINT64 counter_{};
