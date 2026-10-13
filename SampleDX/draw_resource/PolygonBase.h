@@ -7,7 +7,7 @@ class PolygonBase
 public:
 	PolygonBase() = default;
 	
-	virtual ~PolygonBase();
+	virtual ~PolygonBase() = default;
 	
 	virtual bool create() noexcept = 0;
 

@@ -1,7 +1,4 @@
 ﻿#pragma
-
-#include<memory>
-
 #include"../../MoveProhibited/Nomove.h"
 #include"../../window/Window_Base.h"
 
@@ -17,16 +14,17 @@
 #include"../../directx/Shader.h"
 #include"../../directx/PiplineStateObject.h"
 #include"../../directx/ConstantBuffer.h"
+#include"../../directx/DepthBuffer.h"
 
 #include"../../draw_resource/TrianglePolygon.h"
-#include"../../object/Player.h"
-
 #include"../../draw_resource/QuadPolygon.h"
-#include"../../object/Enemy.h"
+#include"../../draw_resource/ShapeContainer.h"
 
+#include"../../object/Player.h"
+#include"../../object/Enemy.h"
 #include"../../object/Camera.h"
 
-
+#include<memory>
 #include<cassert>
 
 struct HWND__;
@@ -63,10 +61,10 @@ public:
 
 private:
 	std::unique_ptr<Window_Base> windowInstance_;    //ウィンドウインスタンス
-	DXGI dxgiInstance_{};							 //DXGIインスタンス
 	CommandQueue commandQueueInstance_{};			 //コマンドキューインスタンス
 	SwapChain swapChainInstance_{};					 //スワップチェインインスタンス
 	RenderTarget renderTargetInstance_{};			 //レンダーターゲットインスタンス
+	DepthBuffer depthBufferInstance_{};              //デプスバッファインスタンス
 	CommandAllocator commandAllocatorInstance_[2]{}; //コマンドアロケータインスタンス 
 	CommandList commandListInstance_{};              //コマンドリストインスタンス
 
@@ -77,17 +75,7 @@ private:
 	RootSignature      rootSignatureInstance_{};                 /// ルートシグネチャインスタンス
 	Shader             shaderInstance_{};                        /// シェーダーインスタンス
 	PiplineStateObject piplineStateObjectInstance_{};            /// パイプラインステートオブジェクトインスタンス
-
-	//三角形ポリゴン
-	TrianglePolygon trianglePolygonInstance_{};                /// 三角形ポリゴンインスタンス
-	Player          triangleObjectInstance_{};                 /// 三角形オブジェクトインスタンス
-	ConstantBuffer  trianglePolygonConstantBufferInstance_{};  /// 三角形ポリゴン用コンスタントバッファインスタンス
-
-	//四角形ポリゴン
-	QuadPolygon    quadPolygonInstance_{};				//四角形ポリゴンインスタンス
-	Enemy          quadObjectInstance_{};               //四角形オブジェクトインスタンス
-	ConstantBuffer quadPolygonConstanBufferInstance_{}; //四角形ポリゴン用コンスタントバッファインスタンス
-
+	
 	//カメラ
 	std::unique_ptr<game::Camera> camera_{};
 };

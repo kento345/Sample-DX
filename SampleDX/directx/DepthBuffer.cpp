@@ -29,6 +29,8 @@ bool DepthBuffer::create(const std::unique_ptr<Window_Base>& window) noexcept
 	depthDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
 	depthDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
 
+
+
 	//デプスバッファのクリア値の設定
 	D3D12_CLEAR_VALUE clearValue{};
 	clearValue.Format = depthDesc.Format;
@@ -51,15 +53,30 @@ bool DepthBuffer::create(const std::unique_ptr<Window_Base>& window) noexcept
 	//ビューの作成
 
 	//ヒープ取得
-	
+	auto heap = DescriptorHeapContainer::instance().get(heapType_);
+
+	// デプスビューの設定
+	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
+	dsvDesc.Format = depthDesc.Format;
+	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
+	dsvDesc.Flags = D3D12_DSV_FLAG_NONE;
+
+	// ディスクリプタヒープの開始ハンドルを取得
+	handle_ = heap->GetCPUDescriptorHandleForHeapStart();
+	// デプスビューの作成
+	Device::instance().get()->CreateDepthStencilView(depthBuffer_.Get(), &dsvDesc, handle_);
+
+	return true;
 }
 
 ID3D12Resource* DepthBuffer::depthBuffer() const noexcept
 {
-	return nullptr;
+	assert(depthBuffer_ && "デプスバッファが未生成です\0");
+	return depthBuffer_.Get();
 }
 
 D3D12_CPU_DESCRIPTOR_HANDLE DepthBuffer::getCpuDescriptorHandle() const noexcept
 {
-	return D3D12_CPU_DESCRIPTOR_HANDLE();
+	assert(depthBuffer_ && "デプスバッファが未生成です\0");
+	return handle_;
 }

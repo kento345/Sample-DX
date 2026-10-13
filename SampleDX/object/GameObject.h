@@ -17,12 +17,13 @@ namespace game {
 		/// </summary>
 		virtual ~GameObject() = default;
 
+	public:
 		virtual void initialize()noexcept override;
 
 		/// <summary>
 		/// オブジェクトの更新
 		/// </summary>
-		virtual void update() noexcept override;
+		virtual void update() noexcept override {};
 
 		virtual void setDrawCommand(const CommandList& commandList, UINT slot)noexcept override;
 

@@ -54,7 +54,7 @@ RenderTarget::~RenderTarget()
 	auto handle = heap->GetCPUDescriptorHandleForHeapStart();
 
 	//インデックスに応じてハンドルを移動
-	handle.ptr += index * Device::instance().get()->GetDescriptorHandleIncrementSize(heapType);
+	handle.ptr += index * Device::instance().get()->GetDescriptorHandleIncrementSize(heapType_);
 	return handle;
 }
 

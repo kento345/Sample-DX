@@ -10,26 +10,33 @@ namespace game {
 		GameObject::initialize();
 
 		auto quadId = ShapeContainer::instance().create<QuadPolygon>();
-
+		set({ -.2f, 0.0f, 0.1f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, { .0f, 1, .0f, 1 }, quadId);
 	}
 
 	void Player::update() noexcept
 	{
-		const float pos = 0.05f;
+		GameObject::update();
+
+		constexpr float moveSpeed = 0.05f;
+		
+		DirectX::XMFLOAT3 pos{};
 		if (Input::instance().getKey('W')) {
-			position_.z += pos;
+			pos.z += moveSpeed;
 		}
 		if (Input::instance().getKey('S')) {
-			position_.z -= pos;
+			pos.z -= moveSpeed;
 		}
 		if (Input::instance().getKey('A')) {
-			position_.x -= pos;
+			pos.x -= moveSpeed;
 		}
 		if (Input::instance().getKey('D')) {
-			position_.x += pos;
+			pos.x += moveSpeed;
 		}
-		world_ = DirectX::XMMatrixTranslation(position_.x, position_.y, position_.z);
-		color_ = DirectX::XMFLOAT4(0.1f, 1.0f, 1.0f, 1.0f);
+
+		DirectX::XMVECTOR temp = DirectX::XMVectorSet(pos.x, pos.y, pos.z, 0.0f);
+		world_.r[3] = DirectX::XMVectorAdd(world_.r[3], temp);
+
+
 	}
 }
 

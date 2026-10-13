@@ -47,7 +47,7 @@ namespace game {
 			DirectX::XMLoadFloat3(&up_));
 	}
 
-	void Camera::createDrawBuffer() {
+	void Camera::createDrawBuffer() noexcept {
 		if (!constantBuffer_.create(sizeof(ConstBufferData))) {
 			assert(false && "カメラ用コンスタントバッファの作成に失敗");
 		}

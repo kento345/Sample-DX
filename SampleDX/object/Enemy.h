@@ -9,9 +9,16 @@ namespace game {
 
 		Enemy() = default;
 
-		~Enemy() = default;
+		virtual ~Enemy() = default;
+	
+	public:
+		virtual void initialize()noexcept override;
 
-		void update() noexcept override;
+		virtual void update() noexcept override;
+
+	public:
+
+		virtual void OnHit()noexcept override;
 	};
 }
 

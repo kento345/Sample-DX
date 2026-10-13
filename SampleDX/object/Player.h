@@ -10,6 +10,8 @@ namespace game {
 
 		virtual ~Player() = default;
 
+	public:
+
 		virtual void initialize()noexcept override;
 
 		virtual void update() noexcept override;

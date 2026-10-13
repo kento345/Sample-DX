@@ -26,7 +26,7 @@ namespace game {
 	void GameObject::createDrawBuffer() noexcept
 	{
 		if (!constantBuffer_.create(sizeof(ConstBufferData))) {
-			assert(false && "GameObject　コンスタントバッファの作成に失敗");
+			assert(false && "GameObject コンスタントバッファの作成に失敗");
 		}
 	}
 

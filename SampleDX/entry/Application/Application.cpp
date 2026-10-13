@@ -4,6 +4,7 @@
 #include "Application.h"
 
 #include"../../directx/Device.h"
+#include"../../object/GameObjectManager.h"
 
 #include"../../window/FullWindow.h"
 #include"../../window/ScaleWindow.h"
@@ -43,14 +44,8 @@ bool Application::initialize(HINSTANCE hInstance)
 		windowInstance_ = std::move(wi);
 	}
 
-	//DXGI の生成
-	if (!dxgiInstance_.setDisplayAdapter()) {
-		assert(false && "DXGIのアダプタの設定に失敗しました");
-		return false;
-	}
-
 	//デバイスの生成
-	if (!Device::instance().create(dxgiInstance_)) {
+	if (!Device::instance().create()) {
 		assert(false && "デバイスの作成に失敗しました");
 		return false;
 	}
@@ -62,7 +57,7 @@ bool Application::initialize(HINSTANCE hInstance)
 	}
 
 	//スワップチェインの生成
-	if (!swapChainInstance_.create(dxgiInstance_, windowInstance_, commandQueueInstance_)) {
+	if (!swapChainInstance_.create(windowInstance_, commandQueueInstance_)) {
 		assert(false && "スワップチェインの作成に失敗しました");
 		return false;
 	}
@@ -91,6 +86,12 @@ bool Application::initialize(HINSTANCE hInstance)
 		return false;
 	}
 
+	// デプスバッファの生成
+	if (!depthBufferInstance_.create(windowInstance_)) {
+		assert(false && "デプスバッファの作成に失敗しました");
+		return false;
+	}
+
 	//コマンドアロケータの生成
 	if (!commandAllocatorInstance_[0].create(D3D12_COMMAND_LIST_TYPE_DIRECT)) {
 		assert(false && "コマンドアロケータの作成に失敗しました");
@@ -113,22 +114,6 @@ bool Application::initialize(HINSTANCE hInstance)
 		assert(false && "フェンスの作成に失敗しました");
 		return false;
 	}
-
-
-	//三角形ポリゴンの生成
-	if (!trianglePolygonInstance_.create()) {
-		assert(false && "三角形ポリゴンの作成に失敗しました");
-		return false;
-	}
-
-	triangleObjectInstance_.initialize({0.f,0.f,0.f}, {0.1f,0.1f,0.1f,1.0f});
-
-	//四角形ポリゴン生成
-	if (!quadPolygonInstance_.create()){
-		assert(false && "四角形ポリゴンの作成に失敗しました");
-		return false;
-	}
-	quadObjectInstance_.initialize({ 2.f,0.f,1.f }, { 1.f,0.f,0.f,1.f });
 
 	//ルートシグネチャの生成
 	if (!rootSignatureInstance_.create()) {
@@ -184,10 +169,9 @@ void Application::loop() noexcept
 		//カメラの更新
 		camera_->update();
 		//三角形オブジェクトの更新
-		triangleObjectInstance_.update();
+		game::GameObjectManager::instance().update();
 		//四角形オブジェクトの更新
-		quadObjectInstance_.update();
-		
+		game::GameObjectManager::instance().postUpdate();
 
 		// 現在のバックバッファインデックスを取得
 		const auto backBufferIndex = swapChainInstance_.get()->GetCurrentBackBufferIndex();
@@ -212,6 +196,9 @@ void Application::loop() noexcept
 		//レンダーターゲットの設定
 		D3D12_CPU_DESCRIPTOR_HANDLE handles[] = { renderTargetInstance_.getDescriptorHandle(backBufferIndex) };
 		commandListInstance_.get()->OMSetRenderTargets(1, handles, false, nullptr);
+		//デプスバッファのハンドルも設定
+		D3D12_CPU_DESCRIPTOR_HANDLE depthHandle = depthBufferInstance_.getCpuDescriptorHandle();
+		commandListInstance_.get()->OMSetRenderTargets(1, handles, false, &depthHandle);
 
 		//レンダーターゲットのクリア
 		const float	 cleaColor[] = { 0.2f, 0.2f, 0.2f, 1.2f };  // 赤色でクリア
@@ -253,30 +240,7 @@ void Application::loop() noexcept
 		}
 	
 		{
-/*			// 三角形ポリゴンのコンスタントバッファへデータ転送
-			TrianglePolygon::ConstBufferData triangleData{
-				DirectX::XMMatrixTranspose(triangleObjectInstance_.world()),
-				triangleObjectInstance_.color() };
-			UINT8* pTriangleData{};
-			trianglePolygonConstantBufferInstance_.constantBuffer()->Map(0, nullptr, reinterpret_cast<void**>(&pTriangleData));
-			memcpy_s(pTriangleData, sizeof(triangleData), &triangleData, sizeof(triangleData));
-			trianglePolygonConstantBufferInstance_.constantBuffer()->Unmap(0, nullptr);
-			commandListInstance_.get()->SetGraphicsRootDescriptorTable(1, trianglePolygonConstantBufferInstance_.getGpuDescriptorHandle());
-			// ポリゴンの描画
-			trianglePolygonInstance_.draw(commandListInstance_);*/
-		}
-
-		{
-/*			QuadPolygon::ConstBufferData quadData{
-				DirectX::XMMatrixTranspose(quadObjectInstance_.world()),
-				quadObjectInstance_.color() };
-			UINT8* pQuadData{};
-			quadPolygonConstanBufferInstance_.constantBuffer()->Map(0, nullptr, reinterpret_cast<void**>(&pQuadData));
-			memcpy_s(pQuadData, sizeof(quadData), &quadData, sizeof(quadData));
-			quadPolygonConstanBufferInstance_.constantBuffer()->Unmap(0, nullptr);
-			commandListInstance_.get()->SetGraphicsRootDescriptorTable(1, quadPolygonConstanBufferInstance_.getGpuDescriptorHandle());
-
-			quadPolygonInstance_.draw(commandListInstance_);*/
+			game::GameObjectManager::instance().draw(commandListInstance_);
 		}
 		//-------------------------------------------------
 
@@ -302,4 +266,5 @@ void Application::loop() noexcept
 
 	commandQueueInstance_.get()->Signal(fenceInstance_.get(), nextFenceValue_);
 	fenceInstance_.wait(nextFenceValue_);
+	game::GameObjectManager::instance().clear();
 }

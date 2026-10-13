@@ -3,9 +3,11 @@
 #include"DXGI.h"
 #include<d3d12.h>
 #include<wrl/client.h>
+#include"../util.h"
+#include"../MoveProhibited/Nomove.h"
 
 
-class Device final
+class Device : public Nomove
 {
 public:
 	/// <summary>
@@ -22,7 +24,7 @@ public:
 	/// </summary>
 	/// <param name="adapter"></param>
 	/// <returns></returns>
-	[[nodiscard]] bool create(const DXGI& dxgi) noexcept;
+	[[nodiscard]] bool create() noexcept;
 
 	/// <summary>
 	/// デバイスの取得
@@ -30,7 +32,16 @@ public:
 	/// <returns></returns>
 	[[nodiscard]] ID3D12Device* get() const noexcept;
 
+	[[nodiscard]] const DXGI& dxgi() const noexcept;
+
 private:
-	ID3D12Device* device_{}; //デバイス	
+
+	Device() = default;
+	
+	~Device() = default;
+
+private:
+	DXGI dxgiInstance_{};
+	Microsoft::WRL::ComPtr<ID3D12Device> device_{}; //デバイス	
 };
 

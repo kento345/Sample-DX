@@ -33,7 +33,7 @@ namespace game {
 
 		template<typename T,typename... Args>
 		[[nodiscard]] UINT64 createObject(Args&&... args)noexcept {
-			static_assert(std::is_base_of<GameObject, T>::value, "GameObjectではない物を作ろうとしてます");
+			static_assert(std::is_base_of<GameObject, T>::value, "GameObjectではない物を作ろうとしてます\0");
 			const auto handle = ++counter_;
 
 			auto func = [...a = std::forward<Args>(args)]() mutable {
