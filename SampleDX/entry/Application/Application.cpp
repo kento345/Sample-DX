@@ -135,10 +135,8 @@ bool Application::initialize(HINSTANCE hInstance)
 	camera_ = std::make_unique<game::Camera>();
 	camera_->initialize();
 
-	//三角形ポリゴン
-	
-	//四角形ポリゴン
-
+	game::GameObjectManager::instance().createObject<game::Player>();
+	game::GameObjectManager::instance().createObject<game::Enemy>();
 
     return true;
 }
@@ -166,7 +164,7 @@ void Application::loop() noexcept
 {
 	while (windowInstance_->messageLoop())
 	{
-		//カメラの更新
+/*		//カメラの更新
 		camera_->update();
 		//三角形オブジェクトの更新
 		game::GameObjectManager::instance().update();
@@ -259,6 +257,106 @@ void Application::loop() noexcept
 		swapChainInstance_.get()->Present(1, 0);
 
 		//フェンスにフェンス値を設定
+		commandQueueInstance_.get()->Signal(fenceInstance_.get(), nextFenceValue_);
+		frameFenceValue_[backBufferIndex] = nextFenceValue_;
+		nextFenceValue_++*/
+		// カメラの更新
+		camera_->update();
+
+		// ゲームオブジェクトの更新
+		game::GameObjectManager::instance().update();
+
+		// ゲームオブジェクトの後更新
+		game::GameObjectManager::instance().postUpdate();
+
+
+		// 描画処理 /////////////////////////////////////////////////////////////////////////
+
+		// 現在のバックバッファインデックスを取得
+		const auto backBufferIndex = swapChainInstance_.get()->GetCurrentBackBufferIndex();
+
+		// 以前のフレームの GPU の処理が完了しているか確認して待機する
+		if (frameFenceValue_[backBufferIndex] != 0) {
+			fenceInstance_.wait(frameFenceValue_[backBufferIndex]);
+		}
+
+		// ディスクリプタヒープの解放予約分を解放
+		DescriptorHeapContainer::instance().applyPendingFree();
+
+		// コマンドアロケータリセット
+		commandAllocatorInstance_[backBufferIndex].reset();
+		// コマンドリストリセット
+		commandListInstance_.reset(commandAllocatorInstance_[backBufferIndex]);
+
+		// リソースバリアでレンダーターゲットを Present から RenderTarget へ変更
+		auto pToRT = resourceBarrier(renderTargetInstance_.get(backBufferIndex), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+		commandListInstance_.get()->ResourceBarrier(1, &pToRT);
+
+		// レンダーターゲットの設定
+		D3D12_CPU_DESCRIPTOR_HANDLE handles[] = { renderTargetInstance_.getDescriptorHandle(backBufferIndex) };
+		// デプスバッファのハンドルも設定
+		D3D12_CPU_DESCRIPTOR_HANDLE depthHandle = depthBufferInstance_.getCpuDescriptorHandle();
+		commandListInstance_.get()->OMSetRenderTargets(1, handles, false, &depthHandle);
+
+		// レンダーターゲットのクリア
+		const float clearColor[] = { 0.2f, 0.2f, 0.2f, 1.0f };  // クリア
+		commandListInstance_.get()->ClearRenderTargetView(handles[0], clearColor, 0, nullptr);
+		// デプスバッファのクリア
+		commandListInstance_.get()->ClearDepthStencilView(depthHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+
+		// ルートシグネチャの設定
+		commandListInstance_.get()->SetGraphicsRootSignature(rootSignatureInstance_.get());
+
+		// ビューポートの設定
+		const auto [w, h] = windowInstance_->size();
+		D3D12_VIEWPORT viewport{};
+		viewport.TopLeftX = 0.0f;
+		viewport.TopLeftY = 0.0f;
+		viewport.Width = static_cast<float>(w);
+		viewport.Height = static_cast<float>(h);
+		viewport.MinDepth = 0.0f;
+		viewport.MaxDepth = 1.0f;
+		commandListInstance_.get()->RSSetViewports(1, &viewport);
+
+		// シザー矩形の設定
+		D3D12_RECT scissorRect{};
+		scissorRect.left = 0;
+		scissorRect.top = 0;
+		scissorRect.right = w;
+		scissorRect.bottom = h;
+		commandListInstance_.get()->RSSetScissorRects(1, &scissorRect);
+
+		// コンスタントバッファ用ディスクリプタヒープの設定
+		ID3D12DescriptorHeap* p[] = { DescriptorHeapContainer::instance().get(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV) };
+		commandListInstance_.get()->SetDescriptorHeaps(1, p);
+
+		// パイプラインステートの設定
+		commandListInstance_.get()->SetPipelineState(piplineStateObjectInstance_.get());
+
+		// カメラのコンスタントバッファへデータ転送
+		camera_->updateDrawBuffer();
+		camera_->setDrawCommand(commandListInstance_, sceneShaderSlot_);
+
+		// ゲームオブジェクトの描画
+		game::GameObjectManager::instance().draw(commandListInstance_);
+
+		//-------------------------------------------------
+
+		// リソースバリアでレンダーターゲットを RenderTarget から Present へ変更
+		auto rtToP = resourceBarrier(renderTargetInstance_.get(backBufferIndex), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+		commandListInstance_.get()->ResourceBarrier(1, &rtToP);
+
+		// コマンドリストをクローズ
+		commandListInstance_.get()->Close();
+
+		// コマンドキューにコマンドリストを送信
+		ID3D12CommandList* ppCommandLists[] = { commandListInstance_.get() };
+		commandQueueInstance_.get()->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
+
+		// プレゼント
+		swapChainInstance_.get()->Present(1, 0);
+
+		// フェンスにフェンス値を設定
 		commandQueueInstance_.get()->Signal(fenceInstance_.get(), nextFenceValue_);
 		frameFenceValue_[backBufferIndex] = nextFenceValue_;
 		nextFenceValue_++;

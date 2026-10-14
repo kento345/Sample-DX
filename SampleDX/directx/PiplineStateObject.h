@@ -15,7 +15,7 @@ public:
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~PiplineStateObject();
+	~PiplineStateObject() = default;
 
 	/// <summary>
 	/// パイプラインステートオブジェクト生成
@@ -33,6 +33,6 @@ public:
 	[[nodiscard]] ID3D12PipelineState* get()const noexcept;
 
 private:
-	ID3D12PipelineState* piplineState_{}; //パイプラインステート
+	Microsoft::WRL::ComPtr<ID3D12PipelineState> piplineState_{};  //パイプラインステート
 };
 

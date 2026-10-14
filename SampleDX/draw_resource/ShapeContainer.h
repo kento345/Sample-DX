@@ -10,7 +10,7 @@ class ShapeContainer : public Nomove
 {
 public:
 	static ShapeContainer& instance() {
-		ShapeContainer instance;
+		static ShapeContainer instance;
 		return instance;
 	}
 
