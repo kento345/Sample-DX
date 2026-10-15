@@ -14,7 +14,7 @@ namespace {
 }
 
 
-bool a = true;
+bool a = false;
 
 /// <summary>
 /// 初期化
