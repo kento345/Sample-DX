@@ -1,49 +1,40 @@
-﻿// シェーダクラス
+﻿#pragma once
+#include"Device.h"
 
-#pragma once
-
-#include "device.h"
-
-//---------------------------------------------------------------------------------
-/**
- * @brief	シェーダクラス
- */
-class Shader final {
+class Shader final
+{
 public:
-    //---------------------------------------------------------------------------------
-    /**
-     * @brief    コンストラクタ
-     */
-    Shader() = default;
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	Shader() = default;
 
-    //---------------------------------------------------------------------------------
-    /**
-     * @brief    デストラクタ
-     */
-    ~Shader() = default;
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	~Shader();
 
-    //---------------------------------------------------------------------------------
-    /**
-     * @brief	シェーダを作成する
-     * @return	成功すれば true
-     */
-    [[nodiscard]] bool create() noexcept;
+	/// <summary>
+	/// シェーダの作成
+	/// </summary>
+	/// <param name="device"></param>
+	/// <returns></returns>
+	[[nodiscard]] bool create()noexcept;
 
-    //---------------------------------------------------------------------------------
-    /**
-     * @brief	頂点シェーダを取得する
-     * @return	頂点シェーダのデータ
-     */
-    [[nodiscard]] ID3DBlob* vertexShader() const noexcept;
+	/// <summary>
+	/// 頂点シェーダを取得
+	/// </summary>
+	/// <returns></returns>
+	[[nodiscard]] ID3DBlob* vertexShader()const noexcept;
 
-    //---------------------------------------------------------------------------------
-    /**
-     * @brief	ピクセルシェーダを取得する
-     * @return	ピクセルシェーダのデータ
-     */
-    [[nodiscard]] ID3DBlob* pixelShader() const noexcept;
+	/// <summary>
+	/// ピクセルシェーダの取得
+	/// </summary>
+	/// <returns></returns>
+	[[nodiscard]] ID3DBlob* pixelShader()const noexcept;
 
 private:
-    Microsoft::WRL::ComPtr<ID3DBlob> vertexShader_{};  /// 頂点シェーダ
-    Microsoft::WRL::ComPtr<ID3DBlob> pixelShader_{};   /// ピクセルシェーダ
+	ID3DBlob* vertexShader_{}; //頂点シェーダ
+	ID3DBlob* pixelShader_{};  //ピクセルシェーダ
 };
+
