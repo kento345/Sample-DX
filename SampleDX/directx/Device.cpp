@@ -1,4 +1,4 @@
-#include "Device.h"
+﻿#include "Device.h"
 #include<cassert>
 
 #pragma comment(lib,"d3d12.lib")

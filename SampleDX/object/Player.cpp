@@ -2,6 +2,7 @@
 #include"../window/Input.h"
 #include"../draw_resource/ShapeContainer.h"
 #include"../draw_resource/QuadPolygon.h"
+#include"../Debug/Debug.h"
 
 
 namespace game {
@@ -9,8 +10,10 @@ namespace game {
 	void Player::initialize()noexcept {
 		GameObject::initialize();
 
+		Debug::Log("1");
+
 		auto quadId = ShapeContainer::instance().create<QuadPolygon>();
-		set({ -.2f, 0.0f, 0.1f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, { .0f, 1, .0f, 1 }, quadId);
+		set({ -.2f, 0.0f, 0.1f }, { 0.0f, 0.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f, 1 }, quadId);
 	}
 
 	void Player::update() noexcept

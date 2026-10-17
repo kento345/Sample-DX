@@ -37,6 +37,12 @@
     <Filter Include="object">
       <UniqueIdentifier>{64390271-526b-4b71-bec6-ba25c77e471d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Debug">
+      <UniqueIdentifier>{5f3c8ee5-fb64-4c94-9471-648fdf6f55fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Text">
+      <UniqueIdentifier>{3d3ba5c6-44b3-4a30-8f0f-73e073e21f3f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="entry\entry.cpp">
