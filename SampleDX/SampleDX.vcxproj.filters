@@ -28,9 +28,6 @@
     <Filter Include="directx">
       <UniqueIdentifier>{b550dbbf-95bc-42fa-ae65-4678bbb33ee7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="asset">
-      <UniqueIdentifier>{49add947-3935-4490-b3a2-d669239ae429}</UniqueIdentifier>
-    </Filter>
     <Filter Include="draw_resorce">
       <UniqueIdentifier>{0e81e21b-f3aa-4511-af7a-167dae4dcfa9}</UniqueIdentifier>
     </Filter>
@@ -42,6 +39,9 @@
     </Filter>
     <Filter Include="Text">
       <UniqueIdentifier>{3d3ba5c6-44b3-4a30-8f0f-73e073e21f3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="asset">
+      <UniqueIdentifier>{59af83b5-7bab-48ea-ab53-da31f556edd9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
