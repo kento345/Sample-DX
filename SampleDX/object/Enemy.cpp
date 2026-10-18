@@ -8,7 +8,7 @@ namespace game {
 		GameObject::initialize();
 
 		auto triId = ShapeContainer::instance().create<TrianglePolygon>();
-		set({ 0.0f, 0.0f, 30.0f }, { 0.0f, 0.0f, 0.0f }, { 10.0f, 10.0f, 1.0f }, { 1.0f, 0.0f, 0.0f, 1 }, triId);
+		set({ 0.0f, 0.0f, 30.0f }, { 0.0f, 0.0f, 0.0f }, { 10.0f, 10.0f, 1.0f }, { 1.0f, 1.0f, 1.0f, 1 }, triId);
 	}
 
 	void Enemy::update() noexcept

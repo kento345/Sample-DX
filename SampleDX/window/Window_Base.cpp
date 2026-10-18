@@ -8,6 +8,9 @@
 bool Window_Base::messageLoop() noexcept
 {
     MSG msg{};
+
+    Input::instance().updatePrevKeyState();
+
     while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
         if (msg.message == WM_QUIT) {
             return false;  // WM_QUITメッセージが来たらループを抜ける

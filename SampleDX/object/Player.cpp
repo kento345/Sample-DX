@@ -3,6 +3,9 @@
 #include"../draw_resource/ShapeContainer.h"
 #include"../draw_resource/QuadPolygon.h"
 
+#include"../object/GameObjectManager.h"
+#include"../object/Bullet.h"
+
 
 namespace game {
 
@@ -37,7 +40,9 @@ namespace game {
 		DirectX::XMVECTOR temp = DirectX::XMVectorSet(pos.x, pos.y, pos.z, 0.0f);
 		world_.r[3] = DirectX::XMVectorAdd(world_.r[3], temp);
 
-
+		if (Input::instance().getTrigger(VK_SPACE)) {
+			game::GameObjectManager::instance().createObject<Bullet>(handle());
+		}
 	}
 }
 

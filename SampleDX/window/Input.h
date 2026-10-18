@@ -1,9 +1,12 @@
 ﻿#pragma once
 
+#include"../MoveProhibited/Nomove.h"
+
 #include<Windows.h>
 #include<cstdint>
+#include<array>
 
-class Input final
+class Input final : public Nomove
 {
 public:
 
@@ -16,11 +19,27 @@ public:
 		return instance;
 	}
 
+	/// <summary>
+	/// 入力されていればtrue
+	/// </summary>
+	/// <param name="sKey"></param>
+	/// <returns></returns>
 	[[nodiscard]] bool getKey(uint16_t sKey)const noexcept;
 
-	[[nodiscard]] bool isTriggerKey(uint16_t sKey)const noexcept;
+	/// <summary>
+	/// 入力したらtrue
+	/// </summary>
+	/// <param name="sKey"></param>
+	/// <returns></returns>
+	[[nodiscard]] bool getTrigger(uint16_t sKey)const noexcept;
 
+	/// <summary>
+	/// キー情報の更新
+	/// </summary>
+	/// <param name="pState"></param>
 	void updateKeyState(void* pState)noexcept;
+
+	void updatePrevKeyState() noexcept;
 
 private:
 	/// <summary>
@@ -33,6 +52,7 @@ private:
 	~Input() = default;
 
 private:
-	byte keyState_[256];
+	std::array<byte, 256> keyState_{};			/// ハードから設定されたキー情報配列
+	std::array<byte, 256> prevKeyState_{};		/// ハードから設定されたキー情報配列
 };
 
