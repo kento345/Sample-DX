@@ -25,7 +25,7 @@ namespace game {
 		//カメラの位置を設定
 		position_ = DirectX::XMFLOAT3(0.0f, 1.5f, destTargetToView_);
 		//カメラの注視点を設定
-		target_ = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
+		target_ = DirectX::XMFLOAT3(0.0f, 0.0f, 10.0f);
 		//カメラの上方向を設定
 		up_ = DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f);
 

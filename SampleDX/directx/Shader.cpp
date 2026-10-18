@@ -50,7 +50,7 @@ ID3DBlob* Shader::vertexShader() const noexcept
 	if (!vertexShader_) {
 		assert(false && "頂点シェーダが未作成です\0");
 	}
-	return vertexShader_;
+	return vertexShader_.Get();
 }
 
 ID3DBlob* Shader::pixelShader() const noexcept
@@ -58,5 +58,5 @@ ID3DBlob* Shader::pixelShader() const noexcept
 	if (!pixelShader_) {
 		assert(false && "ピクセルシェーダが未作成です\0");
 	}
-	return pixelShader_;
+	return pixelShader_.Get();
 }

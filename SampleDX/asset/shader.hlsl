@@ -50,7 +50,8 @@ VSOutput vs(VSInput input)
     output.position = pos;
     
     //色情報をそのまま次の段階に渡す
-    output.color = input.color;
+    //output.color = input.color;
+    output.color = color;
     
     return output;
 }
@@ -59,5 +60,5 @@ VSOutput vs(VSInput input)
 float4 ps(PSInput input) : SV_TARGET
 {
     //色をそのまま出力
-    return input.color;
+    return input.color * color;
 }
