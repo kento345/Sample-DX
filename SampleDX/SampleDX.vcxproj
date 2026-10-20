@@ -45,6 +45,7 @@
     <ClCompile Include="object\GameObjectManager.cpp" />
     <ClCompile Include="object\Object.cpp" />
     <ClCompile Include="object\Player.cpp" />
+    <ClCompile Include="Text\TextRender.cpp" />
     <ClCompile Include="window\FullWindow.cpp" />
     <ClCompile Include="window\Input.cpp" />
     <ClCompile Include="window\ScaleWindow.cpp" />
@@ -79,6 +80,7 @@
     <ClInclude Include="object\GameObjectManager.h" />
     <ClInclude Include="object\Object.h" />
     <ClInclude Include="object\Player.h" />
+    <ClInclude Include="Text\TextRender.h" />
     <ClInclude Include="util.h" />
     <ClInclude Include="window\FullWindow.h" />
     <ClInclude Include="window\Input.h" />

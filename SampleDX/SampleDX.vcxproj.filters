@@ -135,6 +135,9 @@
     <ClCompile Include="object\Bullet.cpp">
       <Filter>object</Filter>
     </ClCompile>
+    <ClCompile Include="Text\TextRender.cpp">
+      <Filter>Text</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="entry\Application\Application.h">
@@ -235,6 +238,9 @@
     </ClInclude>
     <ClInclude Include="object\Bullet.h">
       <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="Text\TextRender.h">
+      <Filter>Text</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
