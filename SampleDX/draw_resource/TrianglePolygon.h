@@ -35,7 +35,7 @@ public:
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~TrianglePolygon() override;
+	~TrianglePolygon()  = default;
 
 	/// <summary>
 	/// ポリゴン生成

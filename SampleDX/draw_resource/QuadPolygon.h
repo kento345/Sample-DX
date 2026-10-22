@@ -31,7 +31,7 @@ public:
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
-	~QuadPolygon() override;
+	~QuadPolygon() = default;
 
 	/// <summary>
 	/// ポリゴン生成

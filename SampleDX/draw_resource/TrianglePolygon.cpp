@@ -2,19 +2,6 @@
 #include<cassert>
 
 
-TrianglePolygon::~TrianglePolygon()
-{
-	//頂点バッファの開放
-	if (vertexBuffer_) {
-		vertexBuffer_->Release();
-		vertexBuffer_ = nullptr;
-	}
-	//インデックスバッファの開放
-	if (indexBuffer_) {
-		indexBuffer_->Release();
-		indexBuffer_ = nullptr;
-	}
-}
 
 bool TrianglePolygon::create() noexcept
 {
