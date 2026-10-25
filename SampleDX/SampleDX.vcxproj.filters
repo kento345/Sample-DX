@@ -238,5 +238,14 @@
     <FxCompile Include="asset\shader.hlsl">
       <Filter>asset</Filter>
     </FxCompile>
+    <FxCompile Include="asset\blur.hlsl">
+      <Filter>asset</Filter>
+    </FxCompile>
+    <FxCompile Include="asset\down_sample.hlsl">
+      <Filter>asset</Filter>
+    </FxCompile>
+    <FxCompile Include="asset\screen_texture.hlsl">
+      <Filter>asset</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
