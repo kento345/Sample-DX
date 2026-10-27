@@ -4,6 +4,10 @@
 #include"RootSignature.h"
 #include "Shader.h"
 
+#include<functional>
+
+using VertexLayout = std::pair<D3D12_INPUT_ELEMENT_DESC*, size_t>;
+
 class PiplineStateObject final
 {
 public:
@@ -24,7 +28,7 @@ public:
 	/// <param name="shader"></param>
 	/// <param name="rootSignature"></param>
 	/// <returns></returns>
-	[[nodiscard]] bool create(const Shader& shader, const RootSignature& rootSignature)noexcept;
+	[[nodiscard]] bool create(const Shader& shader, const RootSignature& rootSignature,std::function<VertexLayout()> layout,int blendType,bool depth)noexcept;
 
 	/// <summary>
 	/// パイプラインステートを取得

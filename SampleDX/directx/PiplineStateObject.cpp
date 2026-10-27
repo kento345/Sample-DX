@@ -2,29 +2,29 @@
 #include<cassert>
 
 
-bool PiplineStateObject::create(const Shader& shader, const RootSignature& rootSignature) noexcept
+[[nodiscard]] bool PiplineStateObject::create(const Shader& shader, const RootSignature& rootSignature, std::function<VertexLayout()> layout, int blendType, bool depth)noexcept
 {
 	//頂点レイアウト
 	//頂点バッファのフォーマットに合わせて設定する
-	D3D12_INPUT_ELEMENT_DESC inputElementDescs[] = {
+/*	D3D12_INPUT_ELEMENT_DESC inputElementDescs[] = {
 		{"POSITION", 0,    DXGI_FORMAT_R32G32B32_FLOAT, 0,  0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
 		{   "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
-	};
+	};*/
 
 	// デプスステートの設定
 	D3D12_DEPTH_STENCIL_DESC depthStateDesc{};
-	depthStateDesc.DepthEnable = true;
+	depthStateDesc.DepthEnable = depth;
 	depthStateDesc.StencilEnable = false;
-	depthStateDesc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
-	depthStateDesc.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
+	depthStateDesc.DepthWriteMask = depth ? D3D12_DEPTH_WRITE_MASK_ALL : D3D12_DEPTH_WRITE_MASK_ZERO;
+	depthStateDesc.DepthFunc = depth? D3D12_COMPARISON_FUNC_LESS : D3D12_COMPARISON_FUNC_NONE;
 
 	// ブレンドステート
    // 描画結果の合成方法を設定する
 	D3D12_RENDER_TARGET_BLEND_DESC renderTargetBlendDesc{};
 	renderTargetBlendDesc.BlendEnable = true;
 	// RGB 合成
-	renderTargetBlendDesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
-	renderTargetBlendDesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+	renderTargetBlendDesc.SrcBlend = blendType == 2 ? D3D12_BLEND_SRC_ALPHA : blendType == 1 ? D3D12_BLEND_ONE : D3D12_BLEND_ZERO;
+	renderTargetBlendDesc.DestBlend = blendType == 2 ? D3D12_BLEND_INV_SRC_ALPHA : blendType == 1 ? D3D12_BLEND_ONE : D3D12_BLEND_ZERO;
 	renderTargetBlendDesc.BlendOp = D3D12_BLEND_OP_ADD;
 	// アルファ合成
 	renderTargetBlendDesc.SrcBlendAlpha = D3D12_BLEND_ONE;
@@ -34,6 +34,9 @@ bool PiplineStateObject::create(const Shader& shader, const RootSignature& rootS
 	renderTargetBlendDesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 	// 設定可能な全てのレンダーターゲットに同じ設定を適用する
 	D3D12_BLEND_DESC blendDesc{};
+	blendDesc.AlphaToCoverageEnable = false;
+	blendDesc.IndependentBlendEnable = false;
+
 	for (UINT i = 0; i < D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT; ++i) {
 		blendDesc.RenderTarget[i] = renderTargetBlendDesc;
 	}
@@ -54,10 +57,12 @@ bool PiplineStateObject::create(const Shader& shader, const RootSignature& rootS
 	rasterizerDesc.ForcedSampleCount = 0;
 	rasterizerDesc.ConservativeRaster = D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF;
 
+	const auto [inputElementDescs, numInputElements] = layout();
+
 	//パイプラインステート
 	//各種設定を構造体にまとめる
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc{};
-	psoDesc.InputLayout = { inputElementDescs, _countof(inputElementDescs) };
+	psoDesc.InputLayout = { inputElementDescs, static_cast<UINT>(numInputElements) };
 	psoDesc.pRootSignature = rootSignature.get();
 	psoDesc.VS = { shader.vertexShader()->GetBufferPointer(), shader.vertexShader()->GetBufferSize() };
 	psoDesc.PS = { shader.pixelShader()->GetBufferPointer(), shader.pixelShader()->GetBufferSize() };
