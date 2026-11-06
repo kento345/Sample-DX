@@ -50,7 +50,7 @@ struct Drae3DRootParameters {
 //-----------
 
 
-/*struct DrawScreenTextureRootParameters {
+struct DrawScreenTextureRootParameters {
 	DrawScreenTextureRootParameters() {
 		//コンスタントバッファ(スロット b0)
 	// 今回の場合はカメラビュー行列や射影行列が入る想定
@@ -68,24 +68,24 @@ struct Drae3DRootParameters {
 		samplers[0].MipLODBias = 0;
 		samplers[0].MaxAnisotropy = 0;
 		samplers[0].ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
-		samplers[0].BorderColor = 
+		samplers[0].BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;
+		samplers[0].MinLOD = 0.0f;
+		samplers[0].MaxLOD = D3D12_FLOAT32_MAX;
+		samplers[0].ShaderRegister = 0;
+		samplers[0].RegisterSpace = 0;
+		samplers[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
 		//ルートパラメータの設定
 		rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-		rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;  // 頂点シェーダーのみで利用する
+		rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;  // 頂点シェーダーのみで利用する
 		rootParameters[0].DescriptorTable.NumDescriptorRanges = 1;
 		rootParameters[0].DescriptorTable.pDescriptorRanges = &r0;
-		rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-		rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;  // 全てのシェーダーで利用する
-		rootParameters[1].DescriptorTable.NumDescriptorRanges = 1;
-		rootParameters[1].DescriptorTable.pDescriptorRanges = &r1;
-
 
 		// ルートシグネチャの設定
 		rootSignatureDesc.pParameters = rootParameters;
-		rootSignatureDesc.NumParameters = 2;
-		rootSignatureDesc.pStaticSamplers = nullptr;
-		rootSignatureDesc.NumStaticSamplers = 0;
+		rootSignatureDesc.NumParameters = 1;
+		rootSignatureDesc.pStaticSamplers = samplers;
+		rootSignatureDesc.NumStaticSamplers = 1;
 		rootSignatureDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 	}
 
@@ -93,7 +93,7 @@ struct Drae3DRootParameters {
 	D3D12_STATIC_SAMPLER_DESC samplers[1]{};
 	D3D12_ROOT_PARAMETER rootParameters[1]{};
 	D3D12_ROOT_SIGNATURE_DESC rootSignatureDesc{};
-};*/
+};
 
 
 class RootSignature final
@@ -108,18 +108,26 @@ public:
 	/// </summary>
 	~RootSignature() = default;
 
+	template<class T>
+	[[nodiscard]] bool createFromProvider() noexcept {
+		T provider;
+		return create(provider.rootSignatureDesc);
+	}
+
 	/// <summary>
 	/// ルートシグネチャを作成する
 	/// </summary>
 	/// <param name="devicenoe"></param>
 	/// <returns></returns>
-	[[nodiscard]] bool create() noexcept;
+	[[nodiscard]] bool create(const D3D12_ROOT_SIGNATURE_DESC& desc) noexcept;
 
 	/// <summary>
 	/// ルートシグネチャを取得
 	/// </summary>
 	/// <returns></returns>
 	[[nodiscard]] ID3D12RootSignature* get() const noexcept;
+
+	[[nodiscard]] bool IsValid()const noexcept{}
 
 private:
 	Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature_{};  /// ルートシグネチャ
