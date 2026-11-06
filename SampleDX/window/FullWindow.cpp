@@ -1,4 +1,4 @@
-#include "FullWindow.h"
+﻿#include "FullWindow.h"
 
 namespace
 {
@@ -7,20 +7,22 @@ namespace
 		switch (msg)
 		{
 		case WM_KEYDOWN:
-			if (wParam == VK_ESCAPE) {
+			if (wParam == VK_ESCAPE)
+			{
 				DestroyWindow(hwnd);
 				return 0;
 			}
 			break;
 
-		case WM_DESTROY:
-			PostQuitMessage(0);
-			return 0;
-
 		case WM_CLOSE:
 			DestroyWindow(hwnd);
 			return 0;
+
+		case WM_DESTROY:
+			PostQuitMessage(0);
+			return 0;
 		}
+
 		return DefWindowProc(hwnd, msg, wParam, lParam);
 	}
 }
